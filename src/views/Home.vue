@@ -19,25 +19,24 @@
                     >
                   </v-card-title>
                   <v-card-text class="text-h5">
-                    "Nous avons tous des trésors enfouis au fond de notre
+                    "Nous avons tous des trésor enfouis au fond de notre
                     grenier ou de nos placards. Trésors qui profiteraient à
                     d’autres. Valorisons-les en leur donnant une seconde vie."
                   </v-card-text>
                   <v-card-actions>
                     <v-list-item>
-                      <v-list-item-avatar>
-                        <v-icon>fas fa-globe</v-icon>
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title>
-                          <v-btn
-                            plain
-                            target="_blank"
-                            href="https://www.ecoconso.be/fr/content/pourquoi-acheter-en-seconde-main"
-                            >EcoConso.be</v-btn
-                          >
-                        </v-list-item-title>
-                      </v-list-item-content>
+                      <v-btn
+                        plain
+                        target="_blank"
+                        href="https://www.ecoconso.be/fr/content/pourquoi-acheter-en-seconde-main"
+                      >
+                        <v-list-item-avatar>
+                          <v-icon>fas fa-globe</v-icon>
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title>EcoConso.be</v-list-item-title>
+                        </v-list-item-content>
+                      </v-btn>
                     </v-list-item>
                   </v-card-actions>
                 </v-card>

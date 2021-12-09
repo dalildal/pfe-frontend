@@ -11,8 +11,10 @@
   "dependencies": {
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
+    "express": "^4.17.1",
     "http-server": "^14.0.0",
     "register-service-worker": "^1.7.1",
+    "serve-static": "^1.14.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.0",
