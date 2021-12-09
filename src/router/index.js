@@ -6,6 +6,7 @@ import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Announces from '../views/Announces.vue'
 import ProductDetail from '../views/ProductDetail.vue'
+import Modo from '../views/Modo.vue'
 
 Vue.use(VueRouter)
 
@@ -47,6 +48,11 @@ const routes = [
     path: '/announces',
     name: 'Announces',
     component: Announces
+  },
+  {
+    path: '/modo',
+    name: 'Modo',
+    component: Modo
   }
 ]
 
