@@ -75,10 +75,10 @@
                     <v-expand-transition>
                         <v-card v-if="hover" style="position: absolute; z-index: 1000">
                             <v-list v-for="subcategory in catSub(category.id)" :key="subcategory.id_categorie">
-                                <v-list-item>
-                                <v-list-item-content>
-                                    <v-list-item-title>{{subcategory.name}}</v-list-item-title>
-                                </v-list-item-content>
+                                <v-list-item @click="handleSubCatClick(subcategory.name)">
+                                    <v-list-item-content>
+                                        <v-list-item-title>{{subcategory.name}}</v-list-item-title>
+                                    </v-list-item-content>
                                 </v-list-item>
                             </v-list>
                         </v-card>
@@ -87,9 +87,9 @@
                
             </v-hover>
         </v-toolbar-items>
-        <v-menu class="hidden-md-and-up">
+        <v-menu>
             <template v-slot:activator="{ on, attrs }">
-                <v-btn
+                <v-btn class="hidden-sm-and-up"
                     elevation="0"
                     v-bind="attrs"
                     v-on="on"
@@ -128,6 +128,7 @@ export default {
     data: () => ({
         campus: ["Woluwe-Saint-Lambert", "Ixelles","Louvain-La-Neuve"],
         selectedCampus: [],
+        selectedSubCategory: null,
         categories: [
             {id: 1, name: 'Maison & Jardin'},
             {id: 2, name: 'Famille'},
@@ -189,10 +190,17 @@ export default {
         catSub (i) {
             return this.subcategories.filter(s=>s.id_categorie==i);
         },
+        handleSubCatClick(i) {
+            this.selectedSubCategory = i;
+            this.editFilter();
+        },
         editFilter() {
             axios.put(
                 `/announces`,
-                this.selectedCampus
+                [
+                    this.selectedCampus,
+                    this.selectedSubCategory
+                ]
             ).then(data => {
                 console.log(data)
             });
