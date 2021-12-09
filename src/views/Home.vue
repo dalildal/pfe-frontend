@@ -19,7 +19,7 @@
                     >
                   </v-card-title>
                   <v-card-text class="text-h5">
-                    "Nous avons tous des trésors enfouis au fond de notre
+                    "Nous avons tous des trésor enfouis au fond de notre
                     grenier ou de nos placards. Trésors qui profiteraient à
                     d’autres. Valorisons-les en leur donnant une seconde vie."
                   </v-card-text>
