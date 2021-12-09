@@ -1,31 +1,94 @@
 <template>
-    <v-app-bar
-    absolute
-    color="white"
+    <v-toolbar
+    app
+    fixed
+    elevation=0
     elevate-on-scroll
     scroll-target="#scrolling-techniques-7"
     >
-        <v-toolbar-title>Campus</v-toolbar-title>
-        <v-list
-            v-for="category in categories"
-            :key="category.id"
-        >
-            <v-list-item>
+        <v-row class="px-5 pt-5">
+            <v-select
+                v-model="selectedCampus"
+                :items="campus"
+                label="Campus"
+                multiple
+                prepend-inner-icon=mdi-school-outline
+            >
+                <template v-slot:prepend-item>
+                    <v-list-item
+                        ripple
+                        @click="toggle"
+                    >
+                        <v-list-item-action>
+                            <v-icon :color="selectedCampus.length > 0 ? 'indigo darken-4' : ''">
+                            {{ icon }}
+                            </v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>
+                            Tout sélectionner
+                            </v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-divider class="mt-2"></v-divider>
+                </template>
+                <template v-slot:append-item>
+                    <v-divider class="mb-2"></v-divider>
+                    <v-list-item disabled>
+                    <v-list-item-avatar color="grey lighten-3">
+                        <v-icon>
+                        mdi-school-outline
+                        </v-icon>
+                    </v-list-item-avatar>
+
+                    <v-list-item-content v-if="likesAllCampus">
+                        <v-list-item-title>
+                        Tous les campus sont sélectionnés
+                        </v-list-item-title>
+                    </v-list-item-content>
+
+                    <v-list-item-content v-else-if="likesSomeCampus">
+                        <v-list-item-title>
+                        {{selectedCampus.length}} campus sélectionnés
+                        </v-list-item-title>
+                    </v-list-item-content>
+
+                    <v-list-item-content v-else>
+                        <v-list-item-title>
+                        Aucun campus sélectionné
+                        </v-list-item-title>
+                        <v-list-item-subtitle>
+                        Sélectionnez un campus!
+                        </v-list-item-subtitle>
+                    </v-list-item-content>
+                    </v-list-item>
+                </template>
+            </v-select>
+        </v-row>
+        <v-toolbar-items class="hidden-sm-and-down" v-for="category in categories" :key="category.id">
+            <v-btn elevation="0">
                 {{category.name}}
-            </v-list-item>
-        </v-list>
-    </v-app-bar>
+            </v-btn>
+        </v-toolbar-items>
+        <v-menu class="hidden-md-and-up">
+            <v-icon>mdi-menu</v-icon>
+            <v-list>
+                <v-list-tile v-for="category in categories" :key="category.id">
+                    <v-list-tile-content>
+                        <v-list-tile-title>{{ category.name }}</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+            </v-list>
+        </v-menu>
+    </v-toolbar>
 </template>
 
 <script>
     export default {
         name: 'CategoryBar',
         data: () => ({
-            campus: [
-                {ville: "Woluwe-Saint-Lambert"},
-                {ville: "Ixelles"},
-                {ville: "Louvain-La-Neuve"},
-            ],
+            campus: ["Woluwe-Saint-Lambert", "Ixelles","Louvain-La-Neuve"],
+            selectedCampus: [],
             categories: [
                 {id: 1, name: 'Maison & Jardin'},
                 {id: 2, name: 'Famille'},
@@ -59,6 +122,31 @@
                 {id_categorie: 5, name: 'Électronique & Ordinateurs'},
                 {id_categorie: 5, name: 'Téléphones mobiles'},
             ]
-        })
+        }),
+        computed: {
+            likesAllCampus () {
+                return this.selectedCampus.length === this.campus.length
+            },
+            likesSomeCampus () {
+                return this.selectedCampus.length > 0 && !this.likesAllCampus
+            },
+            icon () {
+                if (this.likesAllCampus) return 'mdi-close-box'
+                if (this.likesSomeCampus) return 'mdi-minus-box'
+                return 'mdi-checkbox-blank-outline'
+            },
+        },
+
+        methods: {
+            toggle () {
+                this.$nextTick(() => {
+                if (this.likesAllCampus) {
+                    this.selectedCampus = []
+                } else {
+                    this.selectedCampus = this.campus.slice()
+                }
+                })
+            },
+        },
     }
 </script>
