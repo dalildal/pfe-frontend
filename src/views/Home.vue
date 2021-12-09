@@ -43,9 +43,9 @@
               </v-col>
               <v-col cols="12">
                 <v-card elevation="0">
-                  <v-row class="pt-5">
+                  <v-row class="pt-5 px-10">
                     <v-col cols=10>
-                      <h1 class="pl-10">Fil d'actualité</h1>
+                      <h1>Fil d'actualité</h1>
                     </v-col>
                     <v-col cols=2>
                       <v-btn rounded elevation="0" color=#158aaf>Voir tout</v-btn>
@@ -55,7 +55,8 @@
                     <v-col
                       v-for="card in cards"
                       :key="card.title"
-                      md="6"
+                      xs="12"
+                      sm="6"
                       lg="4"
                       xl="3"
                       class="px-5"
@@ -104,7 +105,7 @@
             </v-row>
           </v-container>
         </v-col>
-        <v-col md="4" lg="3">
+        <v-col class="hidden-sm-and-down" md="4" lg="3">
           <v-container fluid>
             <v-row dense>
               <v-col>

@@ -46,38 +46,8 @@
                 right
                 width=300
               >
-                <v-btn absolute plain top right>
-                  <v-icon>far fa-edit</v-icon>
-                </v-btn>
-                <v-list-item class="d-flex justify-center mt-10 ml-5">
-                  <v-list-item-avatar width=75% height=auto>
-                    <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
-                  </v-list-item-avatar>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title class="d-flex justify-center">Julien Van Tongerloo</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-divider></v-divider>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title>Informations de contact</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item two-line>
-                  <v-list-item-content>
-                    <v-list-item-title>EMAIL</v-list-item-title>
-                    <v-list-item-subtitle>julien.vantongerloo@student.vinci.be</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item two-line>
-                  <v-list-item-content>
-                    <v-list-item-title>TELEPHONE</v-list-item-title>
-                    <v-list-item-subtitle>0499/46.73.83</v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-                </v-navigation-drawer>
+                <profile />
+              </v-navigation-drawer>
             </v-sheet>
           </template>
           <span>Profile</span>
@@ -87,8 +57,12 @@
 </template>
 
 <script>
+import Profile from './Profile.vue'
 export default {
     name : 'Navbar',
+    components: {
+      Profile,
+    },
     search: null,
     data: () => ({
       cards: [
@@ -99,7 +73,3 @@ export default {
     })
 }
 </script>
-
-<style>
-
-</style>

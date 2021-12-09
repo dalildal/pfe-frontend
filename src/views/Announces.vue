@@ -9,7 +9,8 @@
                 <v-col
                 v-for="card in cards"
                 :key="card.title"
-                md="6"
+                xs="12"
+                sm="6"
                 lg="4"
                 xl="3"
                 class="px-5"

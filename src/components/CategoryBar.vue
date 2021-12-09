@@ -2,6 +2,7 @@
     <v-toolbar class="mt-2"
         app
         fixed
+        rounded
         elevation=0
         elevate-on-scroll
         scroll-target="#scrolling-techniques-7"
@@ -87,13 +88,34 @@
             </v-hover>
         </v-toolbar-items>
         <v-menu class="hidden-md-and-up">
-            <v-icon>mdi-menu</v-icon>
-            <v-list>
-                <v-list-tile v-for="category in categories" :key="category.id">
-                    <v-list-tile-content>
-                        <v-list-tile-title>{{ category.name }}</v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    elevation="0"
+                    v-bind="attrs"
+                    v-on="on"
+                >
+                    <v-icon>mdi-menu</v-icon>
+                </v-btn>
+            </template>
+            <v-list style="width: 50vw">
+                <v-list-item v-for="category in categories" :key="category.id">
+                    <v-hover v-slot="{ hover }">
+                        <div>
+                            <v-row tile height=100% elevation="0" class="px-2">{{category.name}}</v-row>
+                            <v-expand-transition>
+                                <v-card v-if="hover" style="position: flex; top: 0px; left: 25vw; z-index: 1000">
+                                    <v-list v-for="subcategory in catSub(category.id)" :key="subcategory.id_categorie">
+                                        <v-list-item>
+                                        <v-list-item-content>
+                                            <v-list-item-title>{{subcategory.name}}</v-list-item-title>
+                                        </v-list-item-content>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-card>
+                            </v-expand-transition>
+                        </div>
+                    </v-hover>
+                </v-list-item>
             </v-list>
         </v-menu>
     </v-toolbar>
