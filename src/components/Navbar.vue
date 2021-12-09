@@ -77,27 +77,7 @@
                     <v-list-item-subtitle>0499/46.73.83</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
-                <v-divider></v-divider>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title>Mes ventes en cours ...</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list 
-                  v-for="card in cards"
-                  :key="card.title"
-                >
-                  <v-list-item two-line>
-                    <v-list-item-avatar tile>
-                      <v-img :src="card.src"/>
-                    </v-list-item-avatar>
-                    <v-list-item-content>
-                      <v-list-item-title>{{card.title}}</v-list-item-title>
-                      <v-list-item-subtitle>{{card.desc}}</v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
-              </v-navigation-drawer>
+                </v-navigation-drawer>
             </v-sheet>
           </template>
           <span>Profile</span>
@@ -109,7 +89,7 @@
 <script>
 export default {
     name : 'Navbar',
-
+    search: null,
     data: () => ({
       cards: [
         { title: 'IPHONE 13 PRO MAX', desc:'petit tel pas piqué des annetons', src: 'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-13-pro-family-hero?wid=470&hei=556&fmt=png-alpha&.v=1631220221000'},

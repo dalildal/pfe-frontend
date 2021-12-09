@@ -14,11 +14,11 @@
                 >
                   <v-card-title>
                     <v-img max-width="50" src="../assets/home.png" />
-                    <span class="text-h6 ml-5 font-weight-light"
+                    <span class="text-h6 ml-5 font-weight-light white--text"
                       >Vinci Market</span
                     >
                   </v-card-title>
-                  <v-card-text class="text-h5">
+                  <v-card-text class="text-h5 white--text">
                     "Nous avons tous des trésor enfouis au fond de notre
                     grenier ou de nos placards. Trésors qui profiteraient à
                     d’autres. Valorisons-les en leur donnant une seconde vie."
@@ -42,9 +42,14 @@
                 </v-card>
               </v-col>
               <v-col cols="12">
-                <v-card>
-                  <v-row>
-                    <h1 class="pl-10 pt-5">Fil d'actualité</h1>
+                <v-card elevation="0">
+                  <v-row class="pt-5">
+                    <v-col cols=10>
+                      <h1 class="pl-10">Fil d'actualité</h1>
+                    </v-col>
+                    <v-col cols=2>
+                      <v-btn rounded elevation="0" color=#158aaf>Voir tout</v-btn>
+                    </v-col>
                   </v-row>
                   <v-row class="px-2">
                     <v-col
@@ -86,7 +91,7 @@
                                     <span>4,5</span>
                                   </v-btn>
                                 </template>
-                                <span>Utilisateur recommendé</span>
+                                <span>Utilisateur recommandé</span>
                               </v-tooltip>
                             </v-row>
                           </v-list-item>
@@ -174,6 +179,7 @@ import Navbar from "../components/Navbar";
 
 export default {
   name: "Home",
+  benched: null,
   components: {
     Navbar,
   },
