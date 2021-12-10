@@ -15,23 +15,19 @@
         ></v-autocomplete>
         <v-spacer />
         <v-menu offset-y max-height="50vh" style="position: absolute">
-          <template v-if="notificationNotRead()>0" v-slot:activator="{on, attrs}">
+          <template v-slot:activator="{on, attrs}">
               <v-badge
                 bordered
                 color="error"
                 overlap
                 class="mt-2"
-                :content="notificationNotRead()"
+                :value="notif"
+                :content="notificationsNotRead()"
               >
-                <v-btn icon v-bind="attrs" v-on="on" @click="handleNotifClick()">
+                <v-btn icon v-bind="attrs" v-on="on" @click="notif=0;handleNotifClick()">
                   <v-icon large>mdi-bell-outline</v-icon>
                 </v-btn>
               </v-badge>
-          </template>
-          <template v-else v-slot:activator="{on, attrs}">
-            <v-btn class="pt-2" icon v-bind="attrs" v-on="on">
-              <v-icon large>mdi-bell-outline</v-icon>
-            </v-btn>
           </template>
           <v-card>
             <h2 class="pl-5 pt-2">Notifications</h2>
@@ -99,7 +95,7 @@ export default {
           subtitle: announce.title + (notification.state=='sold'?' vendu à ':notification.state=='buy'?' acheté par ':' a été retiré de la vente')+(notification.to_user?notification.to_user:'')
         }
       },
-      notificationNotRead() {
+      notificationsNotRead() {
         return this.$store.state.notifications.filter(n=>n.read==false).length;
       },
       handleNotifClick() {

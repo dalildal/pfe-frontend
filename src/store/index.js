@@ -20,12 +20,12 @@ export default new Vuex.Store({
       { id: 1, id_announce: 1, state: 'sold', to_user: 'Jean-Louis', read: false}, //normalement id user
       { id: 2, id_announce: 2, state: 'buy', to_user: 'Jospéhine', read: false},
       { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
-      { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
-      { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
-      { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
-      { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
-      { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
-      { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
+      { id: 4, id_announce: 3, state: 'removed', to_user: null, read: false},
+      { id: 5, id_announce: 3, state: 'removed', to_user: null, read: false},
+      { id: 6, id_announce: 3, state: 'removed', to_user: null, read: false},
+      { id: 7, id_announce: 3, state: 'removed', to_user: null, read: false},
+      { id: 8, id_announce: 3, state: 'removed', to_user: null, read: false},
+      { id: 9, id_announce: 3, state: 'removed', to_user: null, read: false},
     ],
     campus: ["Woluwe-Saint-Lambert", "Ixelles","Louvain-La-Neuve"],
     categories: [
