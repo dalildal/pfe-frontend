@@ -4,7 +4,7 @@
         <v-autocomplete
           v-model="select"
           :loading="loading"
-          :items="items"
+          :items="announces"
           :search-input.sync="search"
           cache-items
           flat
@@ -15,41 +15,50 @@
         ></v-autocomplete>
         <v-spacer />
         <v-menu offset-y max-height="50vh" style="position: absolute">
-          <template v-slot:activator="{on, attrs}">
-            <v-badge
-              bordered
-              color="error"
-              overlap
-              class="mt-2"
-            >
-              <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon large>mdi-bell-outline</v-icon>
-              </v-btn>
-            </v-badge>
+          <template v-if="notificationNotRead()>0" v-slot:activator="{on, attrs}">
+              <v-badge
+                bordered
+                color="error"
+                overlap
+                class="mt-2"
+                :content="notificationNotRead()"
+              >
+                <v-btn icon v-bind="attrs" v-on="on" @click="handleNotifClick()">
+                  <v-icon large>mdi-bell-outline</v-icon>
+                </v-btn>
+              </v-badge>
           </template>
-          <v-list two-line v-for="notification in notifications" :key="notification">
-            <v-list-item>
-              <v-list-item-avatar>
-                <v-img :src="notificationRender(notification.id).src" />
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title>{{notificationRender(notification.id).title}}</v-list-item-title>
-                <v-list-item-subtitle>{{notificationRender(notification.id).subtitle}}</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-            <v-divider class="mx-5"/>
-          </v-list>
+          <template v-else v-slot:activator="{on, attrs}">
+            <v-btn class="pt-2" icon v-bind="attrs" v-on="on">
+              <v-icon large>mdi-bell-outline</v-icon>
+            </v-btn>
+          </template>
+          <v-card>
+            <h2 class="pl-5 pt-2">Notifications</h2>
+            <v-list two-line v-for="notification in notifications" :key="notification.id">
+              <v-list-item>
+                <v-list-item-avatar>
+                  <v-img :src="notificationRender(notification.id).src" />
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>{{notificationRender(notification.id).title}}</v-list-item-title>
+                  <v-list-item-subtitle>{{notificationRender(notification.id).subtitle}}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+              <v-divider class="mx-5"/>
+            </v-list>
+          </v-card>
         </v-menu>
         <v-tooltip bottom>
           <template v-slot:activator="{on, attrs}">
             <v-sheet>
-              <row>
+              <div>
                 <v-btn plain height=100% @click.stop="drawer = !drawer" v-bind="attrs" v-on="on">
                   <v-avatar color=#158aaf>JV</v-avatar>
                   <span class="mx-2">Julien</span>
                   <v-icon>fas fa-caret-down</v-icon>
                 </v-btn>
-              </row>
+              </div>
               <v-navigation-drawer
                 v-model="drawer"
                 absolute
@@ -76,15 +85,25 @@ export default {
     },
     search: null,
     data: () => ({
+      drawer: null,
+      select: null,
+      search: null,
+      loading: null,
       announces: [
         {id: 1, title: 'IPHONE 13 PRO MAX', desc:'petit tel pas piqué des annetons', src: 'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-13-pro-family-hero?wid=470&hei=556&fmt=png-alpha&.v=1631220221000'},
         {id: 2, title: 'BANANE', desc:'pas encore mangée', src: 'https://media.lactualite.com/2014/08/banane-480x360.jpg'},
         {id: 3, title: 'VESTE', desc:'comme neuf', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'},
       ],
       notifications: [
-        { id: 1, id_announce: 1, state: 'sold', to_user: 'Jean-Louis'}, //normalement id user
-        { id: 2, id_announce: 2, state: 'buy', to_user: 'Jospéhine'},
-        { id: 3, id_announce: 3, state: 'removed', to_user: null},
+        { id: 1, id_announce: 1, state: 'sold', to_user: 'Jean-Louis', read: false}, //normalement id user
+        { id: 2, id_announce: 2, state: 'buy', to_user: 'Jospéhine', read: false},
+        { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
+        { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
+        { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
+        { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
+        { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
+        { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
+        { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
       ]
     }),
     methods: {
@@ -96,6 +115,12 @@ export default {
           title: notification.state=='sold'?'Article vendu':notification.state=='buy'?'Article acheté':'Article supprimé', 
           subtitle: announce.title + (notification.state=='sold'?' vendu à ':notification.state=='buy'?' acheté par ':' a été retiré de la vente')+(notification.to_user?notification.to_user:'')
         }
+      },
+      notificationNotRead() {
+        return this.notifications.filter(n=>n.read==false).length;
+      },
+      handleNotifClick() {
+        this.notifications.forEach(n=>n.read=true)
       }
     }
 }

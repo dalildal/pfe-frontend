@@ -51,7 +51,9 @@
 <script>
 export default {
     name: 'Profile',
-    editMode: false,
+    data: () => ({
+        editMode: false,
+    }),
     methods: {
         handleClickEdit() {
             this.editMode = !this.editMode

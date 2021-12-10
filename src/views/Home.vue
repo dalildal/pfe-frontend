@@ -48,13 +48,13 @@
                       <h1>Fil d'actualité</h1>
                     </v-col>
                     <v-col cols=2>
-                      <v-btn rounded elevation="0" color=#158aaf>Voir tout</v-btn>
+                      <v-btn rounded elevation="0" color=#158aaf href="/announces">Voir tout</v-btn>
                     </v-col>
                   </v-row>
                   <v-row class="px-2">
                     <v-col
                       v-for="card in cards"
-                      :key="card.title"
+                      :key="card.id"
                       xs="12"
                       sm="6"
                       lg="4"
@@ -118,7 +118,7 @@
                     item-height="64"
                   >
                     <template v-slot:default="{ item }">
-                      <v-list-item two-line :key="item">
+                      <v-list-item two-line :key="item.id">
                         <v-list-item-avatar tile>
                           <v-img tile :src="item.src" />
                         </v-list-item-avatar>
@@ -149,7 +149,7 @@
                     item-height="70"
                   >
                     <template v-slot:default="{ item }">
-                      <v-list-item two-line :key="item">
+                      <v-list-item two-line :key="item.id">
                         <v-list-item-avatar>
                           <v-img :src="item.src" />
                         </v-list-item-avatar>
@@ -186,16 +186,17 @@ export default {
   },
 
   data: () => ({
+      benched: null,
       cards: [
-        { title: 'IPHONE 13 PRO MAX', desc:'petit tel pas piqué des annetons', src: 'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-13-pro-family-hero?wid=470&hei=556&fmt=png-alpha&.v=1631220221000'},
-        { title: 'BANANE', desc:'pas encore mangée', src: 'https://media.lactualite.com/2014/08/banane-480x360.jpg'},
-        { title: 'VESTE', desc:'comme neuf', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'},
+        { id: 1, title: 'IPHONE 13 PRO MAX', desc:'petit tel pas piqué des annetons', src: 'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-13-pro-family-hero?wid=470&hei=556&fmt=png-alpha&.v=1631220221000'},
+        { id: 2, title: 'BANANE', desc:'pas encore mangée', src: 'https://media.lactualite.com/2014/08/banane-480x360.jpg'},
+        { id: 3, title: 'VESTE', desc:'comme neuf', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'},
       ],
       users: [
-        { name: 'Chris Gaviria', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-        { name: 'Dalil Rachik', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-        { name: 'Filipe Manuel Cardoso Ribeiro', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-        { name: 'Obey Senhaji', src: "https://randomuser.me/api/portraits/men/78.jpg"},
+        { id: 1, name: 'Chris Gaviria', src: "https://randomuser.me/api/portraits/men/78.jpg"},
+        { id: 2, name: 'Dalil Rachik', src: "https://randomuser.me/api/portraits/men/78.jpg"},
+        { id: 3, name: 'Filipe Manuel Cardoso Ribeiro', src: "https://randomuser.me/api/portraits/men/78.jpg"},
+        { id: 4, name: 'Obey Senhaji', src: "https://randomuser.me/api/portraits/men/78.jpg"},
       ]
     }),
 
