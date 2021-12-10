@@ -8,8 +8,15 @@
         </v-btn>
         <v-list-item class="d-flex justify-center mt-10 ml-5">
             <v-list-item-avatar width=75% height=auto v-if="editMode">
-                <v-img class='shaking' src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
-                <v-file-input style="position: absolute; color: white;" class="text--white" prepend-icon="mdi-camera" hide-input></v-file-input>
+                <v-img class='shaking' :src="addedImage?addedImage:'https://randomuser.me/api/portraits/men/78.jpg'"></v-img>
+                <v-file-input 
+                    style="position: absolute; color: white;" 
+                    class="text--white" 
+                    prepend-icon="mdi-camera" 
+                    hide-input 
+                    @change="handleAddImage" 
+                    v-model="addedImage">
+                </v-file-input>
             </v-list-item-avatar>
             <v-list-item-avatar width=75% height=auto v-else>
                 <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
@@ -64,10 +71,10 @@
 import axios from 'axios';
 export default {
     name: 'Profile',
-    selectedImage: '',
-    selectedCampus: '',
     data: () => ({
         editMode: false,
+        addedImage: null,
+        selectedCampus: null,
     }),
     methods: {
         handleClickEdit() {
@@ -82,6 +89,9 @@ export default {
             ).then(data => {
                 console.log(data)
             });
+        },
+        handleAddImage() {
+            this.addedImage = URL.createObjectURL(this.addedImage)
         }
     }
 }

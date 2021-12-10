@@ -144,14 +144,14 @@
                   <h3 class="pa-5">Chats</h3>
                   <v-virtual-scroll
                     :bench="benched"
-                    :items="this.$store.state.users"
+                    :items="this.users"
                     height="300"
                     item-height="70"
                   >
                     <template v-slot:default="{ item }">
                       <v-list-item two-line :key="item.id">
                         <v-list-item-avatar>
-                          <v-img :src="item.src" />
+                          <v-img src="../assets/home.png" />
                         </v-list-item-avatar>
                         <v-list-item-content>
                           <v-list-item-title>
@@ -186,10 +186,12 @@ export default {
   data () {
     return {
       announces: null,
+      users: null,
     }
   },
   mounted () {
     this.$store.state.announces.then(response => (this.announces = response.data))
+    this.$store.state.users.then(response => (this.users = response.data))
   }
 };
 </script>

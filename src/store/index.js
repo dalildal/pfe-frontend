@@ -9,13 +9,11 @@ export default new Vuex.Store({
   state: {
     announces: axios.get(
       server.baseURLProd+'products',
-      {headers: {}}),
-    users: [
-      { id: 1, name: 'Chris Gaviria', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-      { id: 2, name: 'Dalil Rachik', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-      { id: 3, name: 'Filipe Manuel Cardoso Ribeiro', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-      { id: 4, name: 'Obey Senhaji', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-    ],
+      {headers: {}}
+    ),
+    users: axios.get(server.baseURLProd+'user',
+      {headers: {}}
+    ),
     notifications: [
       { id: 1, id_announce: '61b32c5d077d6f98f1d4130c', state: 'sold', to_user: 'Jean-Louis', read: false}, //normalement id user
       { id: 2, id_announce: '61b32cbe077d6f98f1d4130f', state: 'buy', to_user: 'Jospéhine', read: false},
