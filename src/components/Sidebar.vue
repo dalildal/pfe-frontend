@@ -68,7 +68,7 @@ export default {
       },
       {
         href: '/my-announces',
-        icon: 'mdi-cart-outline',
+        icon: 'mdi-storefront-outline',
         span: 'Mes annonces'
       }
     ],

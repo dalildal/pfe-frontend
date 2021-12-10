@@ -1,18 +1,19 @@
 <template>
-    <v-toolbar
-    app
-    fixed
-    elevation=0
-    elevate-on-scroll
-    scroll-target="#scrolling-techniques-7"
+    <v-toolbar class="mt-2"
+        fixed
+        rounded
+        elevation=0
+        elevate-on-scroll
+        style="z-index: 1"
     >
-        <v-row class="px-5 pt-5">
+        <v-row class="px-5 pt-5 mr-2">
             <v-select
                 v-model="selectedCampus"
-                :items="campus"
+                :items="$store.state.campus"
                 label="Campus"
                 multiple
                 prepend-inner-icon=mdi-school-outline
+                @change="editFilter()"
             >
                 <template v-slot:prepend-item>
                     <v-list-item
@@ -65,88 +66,109 @@
                 </template>
             </v-select>
         </v-row>
-        <v-toolbar-items class="hidden-sm-and-down" v-for="category in categories" :key="category.id">
-            <v-btn elevation="0">
-                {{category.name}}
-            </v-btn>
+        <v-toolbar-items class="hidden-sm-and-down" v-for="category in this.$store.state.categories" :key="category.id">
+            <v-hover v-slot="{ hover }">
+                <div>
+                    <v-btn tile height=100% elevation="0">{{category.name}}</v-btn>
+                    <v-expand-transition>
+                        <v-card v-if="hover" style="position: absolute; z-index: 1000">
+                            <v-list v-for="subcategory in catSub(category.id)" :key="subcategory.id_categorie">
+                                <v-list-item @click="handleSubCatClick(subcategory.name)">
+                                    <v-list-item-content>
+                                        <v-list-item-title>{{subcategory.name}}</v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </v-list>
+                        </v-card>
+                    </v-expand-transition>
+                </div>
+               
+            </v-hover>
         </v-toolbar-items>
-        <v-menu class="hidden-md-and-up">
-            <v-icon>mdi-menu</v-icon>
-            <v-list>
-                <v-list-tile v-for="category in categories" :key="category.id">
-                    <v-list-tile-content>
-                        <v-list-tile-title>{{ category.name }}</v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
+        <v-menu>
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn class="hidden-md-and-up"
+                    elevation="0"
+                    v-bind="attrs"
+                    v-on="on"
+                >
+                    <v-icon>mdi-menu</v-icon>
+                </v-btn>
+            </template>
+            <v-list style="width: 50vw">
+                <v-list-item v-for="category in this.$store.state.categories" :key="category.id">
+                    <v-hover v-slot="{ hover }">
+                        <div>
+                            <v-row tile height=100% elevation="0" class="px-2">{{category.name}}</v-row>
+                            <v-expand-transition>
+                                <v-card v-if="hover" style="position: flex; top: 0px; left: 25vw; z-index: 1000">
+                                    <v-list v-for="subcategory in catSub(category.id)" :key="subcategory.id_categorie">
+                                        <v-list-item @click="handleSubCatClick(subcategory.name)">
+                                        <v-list-item-content>
+                                            <v-list-item-title>{{subcategory.name}}</v-list-item-title>
+                                        </v-list-item-content>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-card>
+                            </v-expand-transition>
+                        </div>
+                    </v-hover>
+                </v-list-item>
             </v-list>
         </v-menu>
     </v-toolbar>
 </template>
 
 <script>
-    export default {
-        name: 'CategoryBar',
-        data: () => ({
-            campus: ["Woluwe-Saint-Lambert", "Ixelles","Louvain-La-Neuve"],
-            selectedCampus: [],
-            categories: [
-                {id: 1, name: 'Maison & Jardin'},
-                {id: 2, name: 'Famille'},
-                {id: 3, name: 'Vêtements & Accessoires'},
-                {id: 4, name: 'Loisirs & Hobbys'},
-                {id: 5, name: 'Électronique'},
-                {id: 6, name: 'Autres'}
-            ],
-            subcategories: [
-                {id_categorie: 1, name: 'Outils'},
-                {id_categorie: 1, name: 'Meubles'},
-                {id_categorie: 1, name: 'Pour la maison'},
-                {id_categorie: 1, name: 'Jardin'},
-                {id_categorie: 1, name: 'Électroménager'},
-                {id_categorie: 2, name: 'Santé & Beauté'},
-                {id_categorie: 2, name: 'Fournitures pour animaux'},
-                {id_categorie: 2, name: 'Puériculture et enfants'},
-                {id_categorie: 2, name: 'Jouets & Jeux'},
-                {id_categorie: 3, name: 'Sacs & Bagages'},
-                {id_categorie: 3, name: 'Vêtements & chaussures femmes'},
-                {id_categorie: 3, name: 'Vêtements & chaussures hommes'},
-                {id_categorie: 3, name: 'Bijoux & Accessoires'},
-                {id_categorie: 4, name: 'Vélos'},
-                {id_categorie: 4, name: 'Loisirs créatifs'},
-                {id_categorie: 4, name: 'Pièces auto'},
-                {id_categorie: 4, name: 'Sports & Activités d\'extérieures'},
-                {id_categorie: 4, name: 'Jeux Vidéo'},
-                {id_categorie: 4, name: 'Livres, films & musiques'},
-                {id_categorie: 4, name: 'Instruments de musique'},
-                {id_categorie: 4, name: 'Antiquité & Objets de collection'},
-                {id_categorie: 5, name: 'Électronique & Ordinateurs'},
-                {id_categorie: 5, name: 'Téléphones mobiles'},
-            ]
-        }),
-        computed: {
-            likesAllCampus () {
-                return this.selectedCampus.length === this.campus.length
-            },
-            likesSomeCampus () {
-                return this.selectedCampus.length > 0 && !this.likesAllCampus
-            },
-            icon () {
-                if (this.likesAllCampus) return 'mdi-close-box'
-                if (this.likesSomeCampus) return 'mdi-minus-box'
-                return 'mdi-checkbox-blank-outline'
-            },
+import axios from "axios";
+export default {
+    name: 'CategoryBar',
+    data: () => ({
+        selectedCampus: [],
+        selectedSubCategory: null,
+    }),
+    computed: {
+        likesAllCampus () {
+            return this.selectedCampus.length === this.$store.state.campus.length
         },
-
-        methods: {
-            toggle () {
-                this.$nextTick(() => {
-                if (this.likesAllCampus) {
-                    this.selectedCampus = []
-                } else {
-                    this.selectedCampus = this.campus.slice()
-                }
-                })
-            },
+        likesSomeCampus () {
+            return this.selectedCampus.length > 0 && !this.likesAllCampus
         },
+        icon () {
+            if (this.likesAllCampus) return 'mdi-close-box'
+            if (this.likesSomeCampus) return 'mdi-minus-box'
+            return 'mdi-checkbox-blank-outline'
+        }
+    },
+    methods: {
+        toggle () {
+            this.$nextTick(() => {
+            if (this.likesAllCampus) {
+                this.selectedCampus = []
+            } else {
+                this.selectedCampus = this.$store.state.campus.slice()
+            }
+            })
+        },
+        catSub (i) {
+            return this.$store.state.subcategories.filter(s=>s.id_categorie==i);
+        },
+        handleSubCatClick(i) {
+            this.selectedSubCategory = i;
+            this.editFilter();
+        },
+        editFilter() {
+            console.log(this.selectedCampus, this.selectedSubCategory);
+            axios.put(
+                `/announces`,
+                [
+                    this.selectedCampus,
+                    this.selectedSubCategory
+                ]
+            ).then(data => {
+                console.log(data)
+            });
+        }
     }
+}
 </script>

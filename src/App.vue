@@ -3,7 +3,7 @@
     <v-app id="inspire">
       <!-- Hardcodé en attendant -->
       <sidebar/>
-      <v-content>
+      <v-main>
         <v-container fluid>
             <v-row class="fill-height">
                 <v-col>
@@ -13,7 +13,7 @@
                 </v-col>
             </v-row>
         </v-container>
-      </v-content>
+      </v-main>
     </v-app>
   </div>
 </template>
@@ -25,7 +25,6 @@ export default {
   name: 'App',
   components: {
     Sidebar
-  }
-  
+  },
 };
 </script>
