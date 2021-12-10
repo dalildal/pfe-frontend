@@ -53,8 +53,8 @@
                   </v-row>
                   <v-row class="px-2">
                     <v-col
-                      v-for="card in cards"
-                      :key="card.id"
+                      v-for="announce in this.$store.state.announces"
+                      :key="announce.id"
                       xs="12"
                       sm="6"
                       lg="4"
@@ -63,13 +63,13 @@
                     >
                       <v-card elevation="0">
                         <v-img
-                          :src="card.src"
+                          :src="announce.src"
                           class="white--text align-end"
                           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                           height="200px"
                         >
-                          <v-card-title v-text="card.title" />
-                          <v-card-subtitle v-text="card.desc" />
+                          <v-card-title v-text="announce.title" />
+                          <v-card-subtitle v-text="announce.desc" />
                         </v-img>
 
                         <v-card-actions>
@@ -113,7 +113,7 @@
                   <h3 class="pa-5">Mes ventes</h3>
                   <v-virtual-scroll
                     :bench="benched"
-                    :items="cards"
+                    :items="this.$store.state.announces"
                     height="250"
                     item-height="64"
                   >
@@ -144,7 +144,7 @@
                   <h3 class="pa-5">Chats</h3>
                   <v-virtual-scroll
                     :bench="benched"
-                    :items="users"
+                    :items="this.$store.state.users"
                     height="300"
                     item-height="70"
                   >
@@ -180,25 +180,8 @@ import Navbar from "../components/Navbar";
 
 export default {
   name: "Home",
-  benched: null,
   components: {
     Navbar,
   },
-
-  data: () => ({
-      benched: null,
-      cards: [
-        { id: 1, title: 'IPHONE 13 PRO MAX', desc:'petit tel pas piqué des annetons', src: 'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-13-pro-family-hero?wid=470&hei=556&fmt=png-alpha&.v=1631220221000'},
-        { id: 2, title: 'BANANE', desc:'pas encore mangée', src: 'https://media.lactualite.com/2014/08/banane-480x360.jpg'},
-        { id: 3, title: 'VESTE', desc:'comme neuf', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'},
-      ],
-      users: [
-        { id: 1, name: 'Chris Gaviria', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-        { id: 2, name: 'Dalil Rachik', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-        { id: 3, name: 'Filipe Manuel Cardoso Ribeiro', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-        { id: 4, name: 'Obey Senhaji', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-      ]
-    }),
-
 };
 </script>

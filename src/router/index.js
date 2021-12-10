@@ -36,12 +36,12 @@ const routes = [
   },
   {
     path: '/register',
-    name: 'Signup',
+    name: 'Register',
     component: Register
   },
   {
     path: '/login',
-    name: 'Signup',
+    name: 'Login',
     component: Login
   },
   {

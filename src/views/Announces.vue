@@ -7,7 +7,7 @@
         >
             <v-row class="px-2 mt-10">
                 <v-col
-                v-for="card in cards"
+                v-for="card in this.$store.state.announces"
                 :key="card.title"
                 xs="12"
                 sm="6"
@@ -67,18 +67,5 @@ export default {
         Navbar,
         CategoryBar,
     },
-    data: () => ({
-      cards: [
-        { title: 'IPHONE 13 PRO MAX', desc:'petit tel pas piqué des annetons', campus: "Woluwe-Saint-Lambert", src: 'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-13-pro-family-hero?wid=470&hei=556&fmt=png-alpha&.v=1631220221000'},
-        { title: 'BANANE', desc:'pas encore mangée', campus: "Ixelles", src: 'https://media.lactualite.com/2014/08/banane-480x360.jpg'},
-        { title: 'VESTE', desc:'comme neuf', campus: "Louvain-La-Neuve", src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'},
-      ],
-      users: [
-        { name: 'Chris Gaviria', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-        { name: 'Dalil Rachik', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-        { name: 'Filipe Manuel Cardoso Ribeiro', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-        { name: 'Obey Senhaji', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-      ]
-    })
 }
 </script>

@@ -4,7 +4,7 @@
         <v-autocomplete
           v-model="select"
           :loading="loading"
-          :items="announces"
+          :items="this.$store.state.announces"
           :search-input.sync="search"
           cache-items
           flat
@@ -35,7 +35,7 @@
           </template>
           <v-card>
             <h2 class="pl-5 pt-2">Notifications</h2>
-            <v-list two-line v-for="notification in notifications" :key="notification.id">
+            <v-list two-line v-for="notification in this.$store.state.notifications" :key="notification.id">
               <v-list-item>
                 <v-list-item-avatar>
                   <v-img :src="notificationRender(notification.id).src" />
@@ -83,33 +83,16 @@ export default {
     components: {
       Profile,
     },
-    search: null,
     data: () => ({
       drawer: null,
       select: null,
       search: null,
       loading: null,
-      announces: [
-        {id: 1, title: 'IPHONE 13 PRO MAX', desc:'petit tel pas piqué des annetons', src: 'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-13-pro-family-hero?wid=470&hei=556&fmt=png-alpha&.v=1631220221000'},
-        {id: 2, title: 'BANANE', desc:'pas encore mangée', src: 'https://media.lactualite.com/2014/08/banane-480x360.jpg'},
-        {id: 3, title: 'VESTE', desc:'comme neuf', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'},
-      ],
-      notifications: [
-        { id: 1, id_announce: 1, state: 'sold', to_user: 'Jean-Louis', read: false}, //normalement id user
-        { id: 2, id_announce: 2, state: 'buy', to_user: 'Jospéhine', read: false},
-        { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
-        { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
-        { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
-        { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
-        { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
-        { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
-        { id: 3, id_announce: 3, state: 'removed', to_user: null, read: false},
-      ]
     }),
     methods: {
       notificationRender(i) {
-        let notification = this.notifications.filter(n=>n.id==i)[0];
-        let announce = this.announces.filter(c=>c.id==notification.id_announce)[0]
+        let notification = this.$store.state.notifications.filter(n=>n.id==i)[0];
+        let announce = this.$store.state.announces.filter(c=>c.id==notification.id_announce)[0]
         return { 
           src: announce.src,
           title: notification.state=='sold'?'Article vendu':notification.state=='buy'?'Article acheté':'Article supprimé', 
@@ -117,10 +100,10 @@ export default {
         }
       },
       notificationNotRead() {
-        return this.notifications.filter(n=>n.read==false).length;
+        return this.$store.state.notifications.filter(n=>n.read==false).length;
       },
       handleNotifClick() {
-        this.notifications.forEach(n=>n.read=true)
+        this.$store.state.notifications.forEach(n=>n.read=true)
       }
     }
 }
