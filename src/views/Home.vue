@@ -53,7 +53,7 @@
                   </v-row>
                   <v-row class="px-2">
                     <v-col
-                      v-for="announce in this.$store.state.announces"
+                      v-for="announce in this.announces"
                       :key="announce.id"
                       xs="12"
                       sm="6"
@@ -63,13 +63,13 @@
                     >
                       <v-card elevation="0">
                         <v-img
-                          :src="announce.src"
+                          src="../assets/home.png"
                           class="white--text align-end"
                           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                           height="200px"
                         >
                           <v-card-title v-text="announce.title" />
-                          <v-card-subtitle v-text="announce.desc" />
+                          <v-card-subtitle v-text="announce.description" />
                         </v-img>
 
                         <v-card-actions>
@@ -113,7 +113,7 @@
                   <h3 class="pa-5">Mes ventes</h3>
                   <v-virtual-scroll
                     :bench="benched"
-                    :items="this.$store.state.announces"
+                    :items="this.announces"
                     height="250"
                     item-height="64"
                   >
@@ -183,5 +183,13 @@ export default {
   components: {
     Navbar,
   },
+  data () {
+    return {
+      announces: null,
+    }
+  },
+  mounted () {
+    this.$store.state.announces.then(response => (this.announces = response.data))
+  }
 };
 </script>

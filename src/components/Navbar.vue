@@ -4,7 +4,7 @@
         <v-autocomplete
           v-model="select"
           :loading="loading"
-          :items="this.$store.state.announces"
+          :items="this.announces"
           :search-input.sync="search"
           cache-items
           flat
@@ -14,6 +14,23 @@
           solo-inverted
         ></v-autocomplete>
         <v-spacer />
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }"
+              class="pt-5">
+            <v-btn
+              elevation="0"
+              v-bind="attrs"
+              v-on="on"
+              large
+              class="mx-5 pt-2"
+              icon
+              href="/add"
+            >
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </template>
+          <span>Ajouter une annonce</span>
+        </v-tooltip>
         <v-menu offset-y max-height="50vh" style="position: absolute">
           <template v-slot:activator="{on, attrs}">
               <v-badge
@@ -34,7 +51,7 @@
             <v-list two-line v-for="notification in this.$store.state.notifications" :key="notification.id">
               <v-list-item>
                 <v-list-item-avatar>
-                  <v-img :src="notificationRender(notification.id).src" />
+                  <v-img src="../assets/home.png" />
                 </v-list-item-avatar>
                 <v-list-item-content>
                   <v-list-item-title>{{notificationRender(notification.id).title}}</v-list-item-title>
@@ -79,18 +96,24 @@ export default {
     components: {
       Profile,
     },
-    data: () => ({
-      drawer: null,
-      select: null,
-      search: null,
-      loading: null,
-    }),
+    data () {
+      return {
+        drawer: null,
+        select: null,
+        search: null,
+        loading: null,
+        announces: null,
+      }
+    },
+    mounted () {
+      this.$store.state.announces.then(response => (this.announces = response.data))
+    },
     methods: {
       notificationRender(i) {
         let notification = this.$store.state.notifications.filter(n=>n.id==i)[0];
-        let announce = this.$store.state.announces.filter(c=>c.id==notification.id_announce)[0]
+        let announce = this.announces.filter(c=>c.id==notification.id_announce)[0]
         return { 
-          src: announce.src,
+          src: "../assets/home.png",
           title: notification.state=='sold'?'Article vendu':notification.state=='buy'?'Article acheté':'Article supprimé', 
           subtitle: announce.title + (notification.state=='sold'?' vendu à ':notification.state=='buy'?' acheté par ':' a été retiré de la vente')+(notification.to_user?notification.to_user:'')
         }

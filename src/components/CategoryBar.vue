@@ -44,22 +44,22 @@
 
                     <v-list-item-content v-if="likesAllCampus">
                         <v-list-item-title>
-                        Tous les $store.state.campus sont sélectionnés
+                        Tous les campus sont sélectionnés
                         </v-list-item-title>
                     </v-list-item-content>
 
                     <v-list-item-content v-else-if="likesSomeCampus">
                         <v-list-item-title>
-                        {{selectedCampus.length}} $store.state.campus sélectionnés
+                        {{selectedCampus.length}} campus sélectionnés
                         </v-list-item-title>
                     </v-list-item-content>
 
                     <v-list-item-content v-else>
                         <v-list-item-title>
-                        Aucun $store.state.campus sélectionné
+                        Aucun campus sélectionné
                         </v-list-item-title>
                         <v-list-item-subtitle>
-                        Sélectionnez un $store.state.campus!
+                        Sélectionnez un campus!
                         </v-list-item-subtitle>
                     </v-list-item-content>
                     </v-list-item>

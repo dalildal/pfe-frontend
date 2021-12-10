@@ -7,7 +7,7 @@
         >
             <v-row class="px-2 mt-10">
                 <v-col
-                v-for="card in this.$store.state.announces"
+                v-for="card in this.announces"
                 :key="card.title"
                 xs="12"
                 sm="6"
@@ -67,5 +67,13 @@ export default {
         Navbar,
         CategoryBar,
     },
+  data () {
+    return {
+      announces: null,
+    }
+  },
+  mounted () {
+    this.$store.state.announces.then(response => (this.announces = response.data))
+  }
 }
 </script>
