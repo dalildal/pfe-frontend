@@ -13,22 +13,44 @@
                     <p class="pt-2 font-weight-thin">Déjà un compte ? <a color=#158aaf href="/login">Se connecter</a></p>
                     <h1 class="pt-14 mb-5">Bienvenue chez Vinci Market</h1>
                     <p class="mb-10 font-weight-thin">Projet dans une démarche de développement durable visant à promouvoir le réemploi.</p>
-                    <v-form>
+                    <v-form @submit.prevent="handleRegister" method="post">
                         <v-text-field
+                            v-model="user.lastname"
+                            label="Nom"
+                            outlined
+                            append-icon="mdi-account-outline"
+                        />
+                        <v-text-field
+                            v-model="user.name"
+                            label="Prenom"
+                            outlined
+                            append-icon="mdi-account-outline"
+                        />
+                        <v-text-field
+                            v-model="user.campus"
+                            label="Campus"
+                            outlined
+                            append-icon="mdi-account-outline"
+                        />
+                        <v-text-field
+                            v-model="user.email"
                             label="Email vinci"
                             outlined
                             append-icon="mdi-account-outline"
                         />
                         <v-text-field
+                            v-model="user.password"
                             label="Mot de passe"
                             outlined
                             append-icon="mdi-lock-outline"
                         />
+                        
                         <v-btn
                             block
                             large
                             elevation="0"
                             color=#158aaf
+                            type="submit"
                         >
                             S'inscrire
                         </v-btn>
@@ -43,11 +65,32 @@
 
 <script>
     import SignUpCanva from '../components/SignUpCanva.vue'
+    import User from '../models/user.js'
+    import axios from 'axios';
 
     export default {
         name: 'Register',
         components: {
             SignUpCanva,
+        },
+
+        data() {
+            return {
+                user : new User('','',0,'','')
+            }
+        },
+
+        methods: {
+            handleRegister() {
+                axios.post('http://localhost:3000/user/register',this.user)
+                this.$router.push({path: '/login'})
+
+            },
+
+            changeUser() {
+                console.log(this.user);
+            }
         }
+
     }
 </script>
