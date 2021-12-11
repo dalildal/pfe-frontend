@@ -51,55 +51,7 @@
                       <v-btn rounded elevation="0" color=#158aaf href="/announces">Voir tout</v-btn>
                     </v-col>
                   </v-row>
-                  <v-row class="px-2">
-                    <v-col
-                      v-for="announce in this.announces"
-                      :key="announce.id"
-                      xs="12"
-                      sm="6"
-                      lg="4"
-                      xl="3"
-                      class="px-5"
-                    >
-                      <v-card elevation="0">
-                        <v-img
-                          src="../assets/home.png"
-                          class="white--text align-end"
-                          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                          height="200px"
-                        >
-                          <v-card-title v-text="announce.title" />
-                          <v-card-subtitle v-text="announce.description" />
-                        </v-img>
-
-                        <v-card-actions>
-                          <v-list-item class="grow">
-                            <v-list-item-avatar color="grey darken-3">
-                              <v-img
-                                class="elevation-6"
-                                alt=""
-                                src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                              ></v-img>
-                            </v-list-item-avatar>
-                            <v-row>
-                              <v-list-item-content>
-                                <v-list-item-title>Evan You</v-list-item-title>
-                              </v-list-item-content>
-                              <v-tooltip top>
-                                <template v-slot:activator="{ on, attrs }">
-                                  <v-btn icon v-bind="attrs" v-on="on">
-                                    <v-icon>mdi-star</v-icon>
-                                    <span>4,5</span>
-                                  </v-btn>
-                                </template>
-                                <span>Utilisateur recommandé</span>
-                              </v-tooltip>
-                            </v-row>
-                          </v-list-item>
-                        </v-card-actions>
-                      </v-card>
-                    </v-col>
-                  </v-row>
+                  <announces-grid :to_filter="false" />
                 </v-card>
               </v-col>
             </v-row>
@@ -130,10 +82,6 @@
                             {{ item.desc }}
                           </v-list-item-subtitle>
                         </v-list-item-content>
-
-                        <v-list-item-action>
-                          <v-icon small> mdi-open-in-new </v-icon>
-                        </v-list-item-action>
                       </v-list-item>
 
                       <v-divider></v-divider>
@@ -176,22 +124,42 @@
 </template>
 
 <script>
+import AnnouncesGrid from '../components/AnnouncesGrid.vue';
 import Navbar from "../components/Navbar";
 
 export default {
   name: "Home",
   components: {
     Navbar,
+    AnnouncesGrid,
   },
   data () {
     return {
-      announces: null,
-      users: null,
+      announces: undefined,
+      users: undefined,
+      benched: undefined,
+      hover: undefined,
     }
   },
   mounted () {
     this.$store.state.announces.then(response => (this.announces = response.data))
     this.$store.state.users.then(response => (this.users = response.data))
+  },
+  methods: {
+    getUserAnnounce(id) {
+      let user = this.users.filter(u=>u._id==id)[0]
+      return user.name+" "+user.lastname
+    }
   }
 };
 </script>
+<style>
+.v-card--reveal {
+  align-items: center;
+  bottom: 0;
+  justify-content: center;
+  opacity: .5;
+  position: absolute;
+  width: 100%;
+}
+</style>

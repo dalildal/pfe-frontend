@@ -8,6 +8,7 @@ import Announces from '../views/Announces.vue'
 import ProductDetail from '../views/ProductDetail.vue'
 import Modo from '../views/Modo.vue'
 import AddAnnounce from '../views/AddAnnounce.vue'
+import Error from '../views/Error.vue'
 
 Vue.use(VueRouter)
 
@@ -59,6 +60,11 @@ const routes = [
     path: '/add',
     name: 'AddAnnounce',
     component: AddAnnounce
+  },
+  { 
+    path: "*", 
+    name: "Error", 
+    component: Error 
   }
 ]
 
@@ -66,6 +72,25 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+// Assign page titles for each of the "named routes"
+// Reason: This allows us to have short named routes, with descriptive title
+const PAGE_TITLE = {
+  "Home": "VinciMarket",
+  "Announces": "VinciMarket | Annonces",
+  "ProductDetail": "VinciMarket | Détails de l'annonce",
+  "Login": "VinciMarket | Se connecter",
+  "Register": "VinciMarket | S'enregistrer",
+  "Modo": "VinciMarket | Page modérateur",
+  "Add": "VinciMarket | Ajouter une annonce",
+  "About": "VinciMarket | À propos de nous`",
+  "Error": "VinciMarket | Error"
+}
+
+router.afterEach((toRoute, fromRoute) => {
+  window.document.title = PAGE_TITLE[toRoute.name]
+  console.log(toRoute, fromRoute)  // this lets you check what else is available to you here
 })
 
 export default router
