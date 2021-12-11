@@ -98,11 +98,12 @@ export default {
     },
     data () {
       return {
-        drawer: null,
-        select: null,
-        search: null,
-        loading: null,
-        announces: null,
+        drawer: undefined,
+        select: undefined,
+        search: undefined,
+        loading: undefined,
+        announces: undefined,
+        notif: undefined,
       }
     },
     mounted () {

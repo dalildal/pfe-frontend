@@ -8,6 +8,23 @@
     >
         <v-row class="px-5 pt-5 mr-2">
             <v-select
+                v-model="ascending"
+                :items="[
+                    {
+                        label: 'Par ordre croissant',
+                        value: true,
+                    },
+                    {
+                        label: 'Par ordre décroissant',
+                        value: false,
+                    }
+                ]"
+                label="Trier"
+                item-text="label"
+                item-value="value"
+            >
+            </v-select>
+            <v-select
                 v-model="selectedCampus"
                 :items="$store.state.campus"
                 label="Campus"
@@ -126,6 +143,7 @@ export default {
     data: () => ({
         selectedCampus: [],
         selectedSubCategory: null,
+        ascending: undefined,
     }),
     computed: {
         likesAllCampus () {
