@@ -1,4 +1,5 @@
 <template>
+  <!-- <div v-if="isLoggedIn"> -->
   <div>
     <navbar />
     <v-container fluid>
@@ -8,7 +9,13 @@
             <v-row dense>
               <v-col cols="12">
                 <v-card
-                  style="background-image: linear-gradient(to top left, #0c607a, #21bfe5);"
+                  style="
+                    background-image: linear-gradient(
+                      to top left,
+                      #0c607a,
+                      #21bfe5
+                    );
+                  "
                   elevation="0"
                   class="mb-5"
                 >
@@ -126,7 +133,7 @@
 <script>
 import AnnouncesGrid from '../components/AnnouncesGrid.vue';
 import Navbar from "../components/Navbar";
-
+import { mapGetters } from "vuex";
 export default {
   name: "Home",
   components: {
@@ -150,7 +157,12 @@ export default {
       let user = this.users.filter(u=>u._id==id)[0]
       return user.name+" "+user.lastname
     }
-  }
+  },
+  computed: {
+    ...mapGetters({
+      isLoggedIn: "user/isLoggedIn",
+    }),
+  },
 };
 </script>
 <style>
