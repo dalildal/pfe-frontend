@@ -185,10 +185,15 @@ export default {
     Navbar,
   },
 
+  mounted() {
+    this.$store.dispatch('user/searchUserByToken')
+  },
+
   computed: {
     ...mapGetters({
-      isLoggedIn: "user/isLoggedIn",
+      isLoggedIn: 'user/isLoggedIn',
     }),
+    user() { return this.$store.state.user}
   },
 
   data: () => ({

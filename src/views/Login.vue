@@ -61,15 +61,13 @@ export default {
     async handleLogin() {
       await axios
         .post("http://localhost:3000/user/login", this.user)
-        .then(async (response) => {
-          console.log(response.data)
+        .then((response) => {
           if (response.data.access_token) {
             let payload = {
               token: response.data.access_token,
-              userId : response.data.userId
+              user : response.data.user
             }
             this.$store.dispatch('user/login', payload )
-            //this.setToken(token) = response.data.access_token;
             this.$router.push({path:'/'})
           }
         });
