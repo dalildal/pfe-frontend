@@ -1,4 +1,5 @@
 <template>
+  <!-- <div v-if="isLoggedIn"> -->
   <div>
     <navbar />
     <v-container fluid>
@@ -8,7 +9,13 @@
             <v-row dense>
               <v-col cols="12">
                 <v-card
-                  style="background-image: linear-gradient(to top left, #0c607a, #21bfe5);"
+                  style="
+                    background-image: linear-gradient(
+                      to top left,
+                      #0c607a,
+                      #21bfe5
+                    );
+                  "
                   elevation="0"
                   class="mb-5"
                 >
@@ -19,9 +26,9 @@
                     >
                   </v-card-title>
                   <v-card-text class="text-h5">
-                    "Nous avons tous des trésor enfouis au fond de notre
-                    grenier ou de nos placards. Trésors qui profiteraient à
-                    d’autres. Valorisons-les en leur donnant une seconde vie."
+                    "Nous avons tous des trésor enfouis au fond de notre grenier
+                    ou de nos placards. Trésors qui profiteraient à d’autres.
+                    Valorisons-les en leur donnant une seconde vie."
                   </v-card-text>
                   <v-card-actions>
                     <v-list-item>
@@ -171,26 +178,55 @@
 
 <script>
 import Navbar from "../components/Navbar";
-
+import { mapGetters } from "vuex";
 export default {
   name: "Home",
   components: {
     Navbar,
   },
 
-  data: () => ({
-      cards: [
-        { title: 'IPHONE 13 PRO MAX', desc:'petit tel pas piqué des annetons', src: 'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-13-pro-family-hero?wid=470&hei=556&fmt=png-alpha&.v=1631220221000'},
-        { title: 'BANANE', desc:'pas encore mangée', src: 'https://media.lactualite.com/2014/08/banane-480x360.jpg'},
-        { title: 'VESTE', desc:'comme neuf', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg'},
-      ],
-      users: [
-        { name: 'Chris Gaviria', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-        { name: 'Dalil Rachik', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-        { name: 'Filipe Manuel Cardoso Ribeiro', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-        { name: 'Obey Senhaji', src: "https://randomuser.me/api/portraits/men/78.jpg"},
-      ]
+  computed: {
+    ...mapGetters({
+      isLoggedIn: "user/isLoggedIn",
     }),
+  },
 
+  data: () => ({
+    cards: [
+      {
+        title: "IPHONE 13 PRO MAX",
+        desc: "petit tel pas piqué des annetons",
+        src: "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-13-pro-family-hero?wid=470&hei=556&fmt=png-alpha&.v=1631220221000",
+      },
+      {
+        title: "BANANE",
+        desc: "pas encore mangée",
+        src: "https://media.lactualite.com/2014/08/banane-480x360.jpg",
+      },
+      {
+        title: "VESTE",
+        desc: "comme neuf",
+        src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
+      },
+    ],
+    users: [
+      {
+        name: "Chris Gaviria",
+        src: "https://randomuser.me/api/portraits/men/78.jpg",
+      },
+      {
+        name: "Dalil Rachik",
+        src: "https://randomuser.me/api/portraits/men/78.jpg",
+      },
+      {
+        name: "Filipe Manuel Cardoso Ribeiro",
+        src: "https://randomuser.me/api/portraits/men/78.jpg",
+      },
+      {
+        name: "Obey Senhaji",
+        src: "https://randomuser.me/api/portraits/men/78.jpg",
+      },
+    ],
+  }),
 };
 </script>
