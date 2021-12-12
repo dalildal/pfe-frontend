@@ -68,7 +68,7 @@
               <div>
                 <v-btn plain height=100% @click.stop="drawer = !drawer" v-bind="attrs" v-on="on">
                   <v-avatar color=#158aaf>JV</v-avatar>
-                  <span class="mx-2">Julien</span>
+                  <span class="mx-2">{{getUser}}</span>
                   <v-icon>fas fa-caret-down</v-icon>
                 </v-btn>
               </div>
@@ -90,41 +90,49 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Profile from './Profile.vue'
 export default {
-    name : 'Navbar',
-    components: {
-      Profile,
-    },
-    data () {
-      return {
-        drawer: undefined,
-        select: undefined,
-        search: undefined,
-        loading: undefined,
-        announces: undefined,
-        notif: undefined,
-      }
-    },
-    mounted () {
-      this.$store.state.announces.then(response => (this.announces = response.data))
-    },
-    methods: {
-      notificationRender(i) {
-        let notification = this.$store.state.notifications.filter(n=>n.id==i)[0];
-        let announce = this.announces.filter(c=>c.id==notification.id_announce)[0]
-        return { 
-          src: "../assets/home.png",
-          title: notification.state=='sold'?'Article vendu':notification.state=='buy'?'Article acheté':'Article supprimé', 
-          subtitle: announce.title + (notification.state=='sold'?' vendu à ':notification.state=='buy'?' acheté par ':' a été retiré de la vente')+(notification.to_user?notification.to_user:'')
-        }
-      },
-      notificationsNotRead() {
-        return this.$store.state.notifications.filter(n=>n.read==false).length;
-      },
-      handleNotifClick() {
-        this.$store.state.notifications.forEach(n=>n.read=true)
-      }
+  name : 'Navbar',
+  components: {
+    Profile,
+  },
+  data () {
+    return {
+      drawer: undefined,
+      select: undefined,
+      search: undefined,
+      loading: undefined,
+      announces: undefined,
+      notif: undefined,
+      user: undefined
     }
+  },
+  mounted () {
+    this.$store.state.announces.then(response => (this.announces = response.data))
+    this.$store.dispatch('user/searchUserByToken')
+  },
+  methods: {
+    notificationRender(i) {
+      let notification = this.$store.state.notifications.filter(n=>n.id==i)[0];
+      let announce = this.announces.filter(c=>c.id==notification.id_announce)[0]
+      return { 
+        src: "../assets/home.png",
+        title: notification.state=='sold'?'Article vendu':notification.state=='buy'?'Article acheté':'Article supprimé', 
+        subtitle: announce.title + (notification.state=='sold'?' vendu à ':notification.state=='buy'?' acheté par ':' a été retiré de la vente')+(notification.to_user?notification.to_user:'')
+      }
+    },
+    notificationsNotRead() {
+      return this.$store.state.notifications.filter(n=>n.read==false).length;
+    },
+    handleNotifClick() {
+      this.$store.state.notifications.forEach(n=>n.read=true)
+    }
+  },
+  computed: {
+    ...mapGetters({
+      getUser: 'user/getUser'
+    })
+  }
 }
 </script>

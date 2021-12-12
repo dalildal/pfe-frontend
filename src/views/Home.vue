@@ -9,13 +9,7 @@
             <v-row dense>
               <v-col cols="12">
                 <v-card
-                  style="
-                    background-image: linear-gradient(
-                      to top left,
-                      #0c607a,
-                      #21bfe5
-                    );
-                  "
+                  style="background-image: linear-gradient(to top left, #0c607a, #21bfe5);"
                   elevation="0"
                   class="mb-5"
                 >
@@ -160,8 +154,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isLoggedIn: "user/isLoggedIn",
+      isLoggedIn: 'user/isLoggedIn',
     }),
+    user() { return this.$store.state.user}
   },
 };
 </script>

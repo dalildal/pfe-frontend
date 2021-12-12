@@ -12,7 +12,7 @@ export default new Vuex.Store({
       server.baseURLProd+'products',
       {headers: {}}
     ),
-    users: axios.get(server.baseURLProd+'user',
+    users: axios.get(server.baseURLDev+'user',
       {headers: {}}
     ),
     notifications: [
