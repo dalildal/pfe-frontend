@@ -1,7 +1,7 @@
 <template>
     <v-row class="px-2">
         <v-col
-            v-for="announce in this.announces"
+            v-for="announce in this.getAnnounces"
             :key="announce.id"
             xs="12"
             sm="6"
@@ -55,25 +55,30 @@ export default {
     name: 'AnnouncesGrid',
     data () {
         return {
-            announces: undefined,
-            users: undefined,
+            users: [],
+            announces: [],
         }
     },
-    props: {
-        to_filter: Boolean,
-    },
+    props: ['search'],
     mounted () {
-        if(this.to_filter) {
-            this.$store.state.announces.then(response => (this.announces = response.data))
-        } else {
-            this.$store.state.announces.then(response => (this.announces = response.data.reverse()))
-        }
-        this.$store.state.users.then(response => (this.users = response.data))
+        this.$store.state.announces.then(response=>this.announces=response.data)
+        this.$store.state.users.then(response=>this.users=response.data)
     },
     methods: {
         getUserAnnounce(id) {
         let user = this.users.filter(u=>u._id==id)[0]
         return user.name+" "+user.lastname
+        }
+    },
+    computed: {
+        getAnnounces() {
+            if(this.search) {
+                return this.announces.filter(item=>{
+                    return item.title.toLowerCase().includes(this.search)
+                })
+            } else {
+                return this.announces
+            }
         }
     }
 }

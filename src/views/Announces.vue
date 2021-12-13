@@ -2,7 +2,8 @@
     <div>
         <navbar />
         <category-bar />
-        <announces-grid :to_filter="true" class="mt-5"/>
+        <h3 class="pa-5" v-if="this.search!==undefined">Résultat pour "{{this.search}}"</h3>
+        <announces-grid :search="this.search"/>
     </div>
 </template>
 
@@ -20,10 +21,11 @@ export default {
     },
     data () {
         return {
-        announces: null,
+            search: undefined
         }
     },
     mounted () {
+        this.search = this.$route.query.search
         this.$store.state.announces.then(response => (this.announces = response.data))
     }
 }

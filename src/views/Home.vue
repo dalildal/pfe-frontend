@@ -52,7 +52,7 @@
                       <v-btn rounded elevation="0" color=#158aaf href="/announces">Voir tout</v-btn>
                     </v-col>
                   </v-row>
-                  <announces-grid :to_filter="false" />
+                  <announces-grid />
                 </v-card>
               </v-col>
             </v-row>
@@ -156,7 +156,6 @@ export default {
     ...mapGetters({
       isLoggedIn: 'user/isLoggedIn',
     }),
-    user() { return this.$store.state.user}
   },
 };
 </script>
