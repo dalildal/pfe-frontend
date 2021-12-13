@@ -8,16 +8,27 @@ export default {
         name: null,
         campus: null,
         email: null,
-        token: localStorage.getItem('token')
+        token: localStorage.getItem('token'),
+        users: []
     },
 
     actions: {
+        getUsers({commit}) {
+            axios.get('http://localhost:3000/user')
+            .then(response => {
+                commit('SET_USERS', response.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+
         login({ commit }, payload) {
             console.log(payload)
             commit('SET_USERINFO', payload)
         },
         async searchUserByToken( {commit}) {
-            let response = await axios.get('http://localhost:3000/user/' + this.state.user.userId,
+            const response = await axios.get('http://localhost:3000/user/' + this.state.user.userId,
             { headers: {
                 'Authorization': `Bearer ${this.state.user.token}`
             }})
@@ -25,6 +36,10 @@ export default {
         }
     },
     mutations: {
+        SET_USERS(state, users) {
+            state.users = users
+        },
+
         SET_USERINFO(state, payload ) {
             state.token = payload.token;
             state.userId = payload.user._id;
@@ -56,6 +71,9 @@ export default {
         },
         getCampus(state) {
             return state.campus
+        },
+        getUserList(state) {
+            return state.users
         }
     }
 

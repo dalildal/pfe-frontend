@@ -9,7 +9,7 @@
             xl="3"
             class="px-5"
         >
-            <v-card elevation="0">
+            <v-card elevation="0" @click="redirectToAnnounce(announce.id)">
             <v-img
                 src="../assets/home.png"
                 class="white--text align-end"
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+
 export default {
     name: 'AnnouncesGrid',
     data () {
@@ -69,12 +70,19 @@ export default {
             this.$store.state.announces.then(response => (this.announces = response.data.reverse()))
         }
         this.$store.state.users.then(response => (this.users = response.data))
+        //this.$store.dispatch('product/getProduct')
     },
     methods: {
         getUserAnnounce(id) {
         let user = this.users.filter(u=>u._id==id)[0]
         return user.name+" "+user.lastname
-        }
+        },
+
+        redirectToAnnounce(id) {
+            this.$router.push({path:'/product/'+id})
+        }        
     }
+
+    
 }
 </script>
