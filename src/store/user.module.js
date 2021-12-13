@@ -4,7 +4,10 @@ export default {
     namespaced: true,
     state: {
         userId: localStorage.getItem('userId'),
-        user: null,
+        lastname: null,
+        name: null,
+        campus: null,
+        email: null,
         token: localStorage.getItem('token')
     },
 
@@ -31,7 +34,10 @@ export default {
             localStorage.setItem('userId', payload.user._id)
         },
         SET_USER(state, user) {
-            state.user = user
+            state.name = user.name
+            state.lastname = user.lastname
+            state.campus = user.campus
+            state.email = user.email
         }
     },
     getters : {
@@ -39,8 +45,17 @@ export default {
             return !!state.token
         },
 
-        getUser(state) {
-            return state.user
+        getLastName(state) {
+            return state.lastname
+        },
+        getName(state) {
+            return state.name
+        },
+        getEmail(state) {
+            return state.email
+        },
+        getCampus(state) {
+            return state.campus
         }
     }
 

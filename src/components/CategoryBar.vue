@@ -19,7 +19,7 @@
                         value: false,
                     }
                 ]"
-                label="Trier"
+                label="Trier par prix"
                 item-text="label"
                 item-value="value"
             >

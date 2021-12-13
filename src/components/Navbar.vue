@@ -67,8 +67,8 @@
             <v-sheet>
               <div>
                 <v-btn plain height=100% @click.stop="drawer = !drawer" v-bind="attrs" v-on="on">
-                  <v-avatar color=#158aaf>JV</v-avatar>
-                  <span class="mx-2">{{getUser}}</span>
+                  <v-avatar color=#158aaf></v-avatar>
+                  <span class="mx-2">{{getName}}</span>
                   <v-icon>fas fa-caret-down</v-icon>
                 </v-btn>
               </div>
@@ -105,7 +105,6 @@ export default {
       loading: undefined,
       announces: undefined,
       notif: undefined,
-      user: undefined
     }
   },
   mounted () {
@@ -131,7 +130,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getUser: 'user/getUser'
+      getName: 'user/getName',
+      getLastName: 'user/getLastName',
+      getCampus: 'user/getCampus',
+      getEmail: 'user/getEmail',
     })
   }
 }
