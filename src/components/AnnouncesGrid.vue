@@ -60,7 +60,7 @@ export default {
             hover: false,
         }
     },
-    props: ['search', 'desc', 'campus'],
+    props: ['search', 'desc', 'campus', 'subcat'],
     mounted () {
         this.$store.state.announces.then(response=>this.announces=response.data)
         this.$store.state.users.then(response=>this.users=response.data)
@@ -70,7 +70,7 @@ export default {
             let user = this.users.filter(u=>u._id==id)[0]
             return user.name+" "+user.lastname
         },
-        filtredAnnounces(search, desc, campus) {
+        filtredAnnounces(search, desc, campus, subcat) {
             let aTemp = this.announces;
             if(search) {
                 aTemp = aTemp.filter(item=>{
@@ -95,12 +95,17 @@ export default {
                     return bool;
                 })
             }
+            if(subcat) {
+                aTemp = aTemp.filter(item=>{
+                    return item.idCategory==subcat
+                })
+            }
             return aTemp
         }
     },
     computed: {
         getAnnounces() {
-            return this.filtredAnnounces(this.search, this.desc, this.campus)
+            return this.filtredAnnounces(this.search, this.desc, this.campus, this.subcat)
         }
     }
 }

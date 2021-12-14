@@ -3,7 +3,7 @@
         <navbar />
         <category-bar />
         <h3 class="pa-5" v-bind:id="this.search!==undefined?'Résultat pour ':''">{{this.search}}</h3>
-        <announces-grid :search="this.search" :desc="this.desc" :campus="this.campus"/>
+        <announces-grid :search="this.search" :desc="this.desc" :campus="this.campus" :subcat="this.subcat"/>
     </div>
 </template>
 
@@ -23,14 +23,15 @@ export default {
         return {
             search: undefined,
             desc: undefined,
-            campus: undefined
+            campus: undefined,
+            subcat: undefined,
         }
     },
     mounted () {
-        console.log(this.campus);
         this.search = this.$route.query.search
         this.desc = this.$route.query.desc
         this.campus = this.$route.query.campus
+        this.subcat = this.$route.query.subcat
     }
 }
 </script>
