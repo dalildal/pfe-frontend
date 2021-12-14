@@ -8,29 +8,32 @@
     >
         <v-row class="px-5 pt-5 mr-2">
             <v-select
-                v-model="ascending"
+                v-model="desc"
                 :items="[
                     {
                         label: 'Par ordre croissant',
-                        value: true,
+                        value: false,
                     },
                     {
                         label: 'Par ordre décroissant',
-                        value: false,
+                        value: true,
                     }
                 ]"
-                label="Trier"
+                label="Trier par prix"
                 item-text="label"
                 item-value="value"
+                @change="handleSort"
             >
             </v-select>
             <v-select
                 v-model="selectedCampus"
                 :items="$store.state.campus"
                 label="Campus"
+                item-text="name"
+                item-value="id"
                 multiple
                 prepend-inner-icon=mdi-school-outline
-                @change="editFilter()"
+                @change="handleCampus"
             >
                 <template v-slot:prepend-item>
                     <v-list-item
@@ -83,14 +86,14 @@
                 </template>
             </v-select>
         </v-row>
-        <v-toolbar-items class="hidden-sm-and-down" v-for="category in this.$store.state.categories" :key="category.id">
+        <v-toolbar-items class="hidden-sm-and-down" v-for="category in this.categories" :key="category.id">
             <v-hover v-slot="{ hover }">
                 <div>
                     <v-btn tile height=100% elevation="0">{{category.name}}</v-btn>
                     <v-expand-transition>
                         <v-card v-if="hover" style="position: absolute; z-index: 1000">
-                            <v-list v-for="subcategory in catSub(category.id)" :key="subcategory.id_categorie">
-                                <v-list-item @click="handleSubCatClick(subcategory.name)">
+                            <v-list v-for="subcategory in catSub(category.id)" :key="subcategory.id">
+                                <v-list-item @click="handleSubCatClick(subcategory.id)">
                                     <v-list-item-content>
                                         <v-list-item-title>{{subcategory.name}}</v-list-item-title>
                                     </v-list-item-content>
@@ -113,14 +116,14 @@
                 </v-btn>
             </template>
             <v-list style="width: 50vw">
-                <v-list-item v-for="category in this.$store.state.categories" :key="category.id">
+                <v-list-item v-for="category in this.categories" :key="category.id">
                     <v-hover v-slot="{ hover }">
                         <div>
                             <v-row tile height=100% elevation="0" class="px-2">{{category.name}}</v-row>
                             <v-expand-transition>
                                 <v-card v-if="hover" style="position: flex; top: 0px; left: 25vw; z-index: 1000">
-                                    <v-list v-for="subcategory in catSub(category.id)" :key="subcategory.id_categorie">
-                                        <v-list-item @click="handleSubCatClick(subcategory.name)">
+                                    <v-list v-for="subcategory in catSub(category.id)" :key="subcategory.id">
+                                        <v-list-item @click="handleSubCatClick(subcategory.id)">
                                         <v-list-item-content>
                                             <v-list-item-title>{{subcategory.name}}</v-list-item-title>
                                         </v-list-item-content>
@@ -137,13 +140,13 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
     name: 'CategoryBar',
     data: () => ({
+        categories: [],
         selectedCampus: [],
         selectedSubCategory: null,
-        ascending: undefined,
+        desc: undefined,
     }),
     computed: {
         likesAllCampus () {
@@ -169,24 +172,44 @@ export default {
             })
         },
         catSub (i) {
-            return this.$store.state.subcategories.filter(s=>s.id_categorie==i);
+            return this.subcategories.filter(s=>s.idCategory==i);
         },
         handleSubCatClick(i) {
             this.selectedSubCategory = i;
-            this.editFilter();
+            this.$router.replace({ query: {
+                search: this.$parent.$children[2].$props.search, 
+                desc: this.desc, 
+                campus: this.selectedCampus,
+                subcat: this.selectedSubCategory,
+            } })
+            this.$parent.$data.subcat = this.selectedSubCategory
+            this.$parent.$children[2].$props.subcat = this.selectedSubCategory
         },
-        editFilter() {
-            console.log(this.selectedCampus, this.selectedSubCategory);
-            axios.put(
-                `/announces`,
-                [
-                    this.selectedCampus,
-                    this.selectedSubCategory
-                ]
-            ).then(data => {
-                console.log(data)
-            });
+        handleCampus() {
+            this.$router.replace({ query: {
+                search: this.$parent.$children[2].$props.search, 
+                desc: this.desc, 
+                campus: this.selectedCampus,
+                subcat: this.selectedSubCategory,
+            } })
+            this.$parent.$data.campus = this.selectedCampus
+            this.$parent.$children[2].$props.campus = this.selectedCampus
+        },
+        handleSort() {
+            this.$router.replace({ query: {
+                search: this.$parent.$children[2].$props.search, 
+                desc: this.desc, 
+                campus: this.selectedCampus,
+                subcat: this.selectedSubCategory,
+            } })
+            this.$parent.$data.desc = this.desc
+            this.$parent.$children[2].$props.desc = this.desc
         }
+    },
+    mounted() {
+        this.$store.state.categories.then(response=>(this.categories=response.data))
+        this.$store.state.subcategories.then(response=>(this.subcategories=response.data))
+        console.log(this.subcategories);
     }
 }
 </script>

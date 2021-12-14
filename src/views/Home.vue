@@ -1,4 +1,5 @@
 <template>
+  <!-- <div v-if="isLoggedIn"> -->
   <div>
     <navbar />
     <v-container fluid>
@@ -51,7 +52,7 @@
                       <v-btn rounded elevation="0" color=#158aaf href="/announces">Voir tout</v-btn>
                     </v-col>
                   </v-row>
-                  <announces-grid :to_filter="false" />
+                  <announces-grid />
                 </v-card>
               </v-col>
             </v-row>
@@ -126,7 +127,7 @@
 <script>
 import AnnouncesGrid from '../components/AnnouncesGrid.vue';
 import Navbar from "../components/Navbar";
-
+import { mapGetters } from "vuex";
 export default {
   name: "Home",
   components: {
@@ -150,7 +151,12 @@ export default {
       let user = this.users.filter(u=>u._id==id)[0]
       return user.name+" "+user.lastname
     }
-  }
+  },
+  computed: {
+    ...mapGetters({
+      isLoggedIn: 'user/isLoggedIn',
+    }),
+  },
 };
 </script>
 <style>

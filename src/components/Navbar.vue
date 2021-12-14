@@ -1,19 +1,18 @@
 <template>
   <v-row class="pt-5 px-9">
       <v-layout class="mb-5">
-        <v-autocomplete
-          v-model="select"
-          :loading="loading"
-          :items="this.announces"
-          :search-input.sync="search"
-          cache-items
-          flat
-          hide-no-data
-          hide-details
-          label="Rechercher ..."
-          solo-inverted
-        ></v-autocomplete>
+        <v-form @submit.prevent="handleSearchSubmit">
+        <v-text-field
+          v-model="search"
+          label="Recherche"
+          placeholder="Recherche d'annonce"
+          outlined
+          prepend-inner-icon="mdi-magnify"
+          style="width: 50vw"
+        ></v-text-field>
+        </v-form>
         <v-spacer />
+        <template v-if="this.isLoggedIn">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }"
               class="pt-5">
@@ -67,8 +66,8 @@
             <v-sheet>
               <div>
                 <v-btn plain height=100% @click.stop="drawer = !drawer" v-bind="attrs" v-on="on">
-                  <v-avatar color=#158aaf>JV</v-avatar>
-                  <span class="mx-2">Julien</span>
+                  <v-avatar color=#158aaf></v-avatar>
+                  <span class="mx-2">{{getName}}</span>
                   <v-icon>fas fa-caret-down</v-icon>
                 </v-btn>
               </div>
@@ -85,46 +84,75 @@
           </template>
           <span>Profile</span>
         </v-tooltip>
+        </template>
+        <template v-else>
+          <v-btn class="mt-2" elevation="0" href="/login">
+            <v-icon>
+              mdi-account-outline
+            </v-icon>
+            Se connecter
+          </v-btn>
+        </template>
       </v-layout>
     </v-row>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Profile from './Profile.vue'
 export default {
-    name : 'Navbar',
-    components: {
-      Profile,
-    },
-    data () {
-      return {
-        drawer: undefined,
-        select: undefined,
-        search: undefined,
-        loading: undefined,
-        announces: undefined,
-        notif: undefined,
-      }
-    },
-    mounted () {
-      this.$store.state.announces.then(response => (this.announces = response.data))
-    },
-    methods: {
-      notificationRender(i) {
-        let notification = this.$store.state.notifications.filter(n=>n.id==i)[0];
-        let announce = this.announces.filter(c=>c.id==notification.id_announce)[0]
-        return { 
-          src: "../assets/home.png",
-          title: notification.state=='sold'?'Article vendu':notification.state=='buy'?'Article acheté':'Article supprimé', 
-          subtitle: announce.title + (notification.state=='sold'?' vendu à ':notification.state=='buy'?' acheté par ':' a été retiré de la vente')+(notification.to_user?notification.to_user:'')
-        }
-      },
-      notificationsNotRead() {
-        return this.$store.state.notifications.filter(n=>n.read==false).length;
-      },
-      handleNotifClick() {
-        this.$store.state.notifications.forEach(n=>n.read=true)
-      }
+  name : 'Navbar',
+  components: {
+    Profile,
+  },
+  data () {
+    return {
+      drawer: undefined,
+      select: undefined,
+      search: undefined,
+      loading: undefined,
+      announces: [],
+      notif: [],
     }
+  },
+  mounted () {
+    this.$store.state.announces.then(response => this.announces=response.data)
+    this.isLoggedIn?this.$store.dispatch('user/searchUserByToken'):null
+  },
+  methods: {
+    notificationRender(i) {
+      let notification = this.$store.state.notifications.filter(n=>n.id==i)[0];
+      let announce = this.announces.filter(c=>c.id==notification.id_announce)[0]
+      return { 
+        src: "../assets/home.png",
+        title: notification.state=='sold'?'Article vendu':notification.state=='buy'?'Article acheté':'Article supprimé', 
+        subtitle: announce.title + (notification.state=='sold'?' vendu à ':notification.state=='buy'?' acheté par ':' a été retiré de la vente')+(notification.to_user?notification.to_user:'')
+      }
+    },
+    notificationsNotRead() {
+      return this.$store.state.notifications.filter(n=>n.read==false).length;
+    },
+    handleNotifClick() {
+      this.$store.state.notifications.forEach(n=>n.read=true)
+    },
+    handleSearchSubmit() {
+      if(this.$route.path!="/announces")
+        this.$router.push({path: "/announces", query: {search: this.search, desc: this.$parent.$children[2].$props.desc}})
+      else
+        this.$router.replace({ query: {
+          search: this.search, 
+          desc: this.$parent.$children[2].$props.desc,
+          campus: this.$parent.$children[2].$props.campus
+        } })
+        this.$parent.$data.search = this.search
+        this.$parent.$children[2].$props.search = this.search
+    }
+  },
+  computed: {
+    ...mapGetters({
+      getName: 'user/getName',
+      isLoggedIn: 'user/isLoggedIn'
+    })
+  }
 }
 </script>

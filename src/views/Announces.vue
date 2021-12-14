@@ -2,7 +2,8 @@
     <div>
         <navbar />
         <category-bar />
-        <announces-grid :to_filter="true" class="mt-5"/>
+        <h3 class="pa-5" v-bind:id="this.search!==undefined?'Résultat pour ':''">{{this.search}}</h3>
+        <announces-grid :search="this.search" :desc="this.desc" :campus="this.campus" :subcat="this.subcat"/>
     </div>
 </template>
 
@@ -20,11 +21,17 @@ export default {
     },
     data () {
         return {
-        announces: null,
+            search: undefined,
+            desc: undefined,
+            campus: undefined,
+            subcat: undefined,
         }
     },
     mounted () {
-        this.$store.state.announces.then(response => (this.announces = response.data))
+        this.search = this.$route.query.search
+        this.desc = this.$route.query.desc
+        this.campus = this.$route.query.campus
+        this.subcat = this.$route.query.subcat
     }
 }
 </script>

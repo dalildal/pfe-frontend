@@ -1,7 +1,7 @@
 <template>
     <v-row class="px-2">
         <v-col
-            v-for="announce in this.announces"
+            v-for="announce in this.getAnnounces"
             :key="announce.id"
             xs="12"
             sm="6"
@@ -55,25 +55,57 @@ export default {
     name: 'AnnouncesGrid',
     data () {
         return {
-            announces: undefined,
-            users: undefined,
+            users: [],
+            announces: [],
+            hover: false,
         }
     },
-    props: {
-        to_filter: Boolean,
-    },
+    props: ['search', 'desc', 'campus', 'subcat'],
     mounted () {
-        if(this.to_filter) {
-            this.$store.state.announces.then(response => (this.announces = response.data))
-        } else {
-            this.$store.state.announces.then(response => (this.announces = response.data.reverse()))
-        }
-        this.$store.state.users.then(response => (this.users = response.data))
+        this.$store.state.announces.then(response=>this.announces=response.data)
+        this.$store.state.users.then(response=>this.users=response.data)
     },
     methods: {
         getUserAnnounce(id) {
-        let user = this.users.filter(u=>u._id==id)[0]
-        return user.name+" "+user.lastname
+            let user = this.users.filter(u=>u._id==id)[0]
+            return user.name+" "+user.lastname
+        },
+        filtredAnnounces(search, desc, campus, subcat) {
+            let aTemp = this.announces;
+            if(search) {
+                aTemp = aTemp.filter(item=>{
+                    return item.title.toLowerCase().includes(search) ||
+                        item.description.toLowerCase().includes(search)
+                })
+            }
+            if(desc===true) {
+                aTemp = aTemp.sort((a,b)=>{return b.price-a.price})
+            } else {
+                aTemp = aTemp.sort((a,b)=>{return a.price-b.price})
+            }
+            if(campus && campus.length>0) {
+                aTemp = aTemp.filter(item=>{
+                    let user = this.users.filter(u=>u._id==item.idUser)[0]
+                    let bool = false
+                    campus.forEach(c=>{
+                        console.log(campus.length);
+                        if(c==user.campus) 
+                            bool = true;
+                    })
+                    return bool;
+                })
+            }
+            if(subcat) {
+                aTemp = aTemp.filter(item=>{
+                    return item.idCategory==subcat
+                })
+            }
+            return aTemp
+        }
+    },
+    computed: {
+        getAnnounces() {
+            return this.filtredAnnounces(this.search, this.desc, this.campus, this.subcat)
         }
     }
 }
