@@ -8,10 +8,22 @@ export default {
         name: null,
         campus: null,
         email: null,
-        token: localStorage.getItem('token')
+        token: localStorage.getItem('token'),
+        userProduct : [],
+        users: []
     },
 
     actions: {
+        getUsers({commit}) {
+            axios.get('http://localhost:3000/user')
+            .then(response => {
+                commit('SET_USERS', response.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+
         login({ commit }, payload) {
             commit('SET_USERINFO', payload)
         },
@@ -19,14 +31,33 @@ export default {
             commit('DELETE_USERINFO')
         },
         async searchUserByToken( {commit}) {
-            let response = await axios.get('http://localhost:3000/user/' + this.state.user.userId,
+            const response = await axios.get('http://localhost:3000/user/' + this.state.user.userId,
             { headers: {
                 'Authorization': `Bearer ${this.state.user.token}`
             }})
             commit('SET_USER', response.data)
+        },
+
+        searchUserById( {commit}, idUserProduct) {
+            axios.get('http://localhost:3000/user/' + idUserProduct)
+            .then(response => {
+                commit('SET_USERPRODUCT', response.data)
+                console.log(response.data)
+            })
+            .catch(error => {
+                console.log(error);
+            })
         }
     },
     mutations: {
+        SET_USERS(state, users) {
+            state.users = users
+        },
+
+        SET_USERPRODUCT(state, userProduct) {
+            state.userProduct = userProduct
+        },
+
         SET_USERINFO(state, payload ) {
             state.token = payload.token;
             state.userId = payload.user._id;
@@ -72,6 +103,9 @@ export default {
         },
         getCampus(state) {
             return state.campus
+        },
+        getUserList(state) {
+            return state.users
         }
     }
 
