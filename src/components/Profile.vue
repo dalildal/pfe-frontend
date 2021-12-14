@@ -8,7 +8,7 @@
         </v-btn>
         <v-list-item class="d-flex justify-center mt-10 ml-5">
             <v-list-item-avatar width=75% height=auto v-if="editMode">
-                <v-img class='shaking' :src="addedImage?addedImage:'https://pfe-vinci-back-dev.herokuapp.com/user/profil-images/'+getProfilPic"></v-img>
+                <v-img class='shaking' :src="displayedImage?displayedImage:'https://pfe-vinci-back-dev.herokuapp.com/user/profil-images/'+getProfilPic"></v-img>
                 <v-file-input 
                     style="position: absolute; color: white;" 
                     class="text--white" 
@@ -48,12 +48,12 @@
         <v-list-item two-line>
             <v-list-item-content>
                 <v-list-item-title>CAMPUS</v-list-item-title>
-                <v-list-item-subtitle v-if="!editMode">{{this.campus.filter(c=>c.id==this.getCampus)[0].name}}</v-list-item-subtitle>
+                <v-list-item-subtitle v-if="!editMode">{{this.displayedCampus}}</v-list-item-subtitle>
                 <v-list-item-subtitle v-else>
                     <v-select
                     v-model="selectedCampus"
                     :items="this.$store.state.campus"
-                    :label="this.campus.filter(c=>c.id==this.getCampus)[0].name"
+                    :label="this.displayedCampus"
                     item-text="name"
                     item-value="id"
                     @change="editCampus"
@@ -74,9 +74,11 @@ export default {
         addedImage: null,
         selectedCampus: null,
         campus: null,
+        displayedImage: null
     }),
     mounted() {
         this.campus = this.$store.state.campus
+        this.$root.$on('forceRerender', this.forceRerender)
     },
     methods: {
         handleClickEdit() {
@@ -86,7 +88,7 @@ export default {
                     let fd = new FormData()
                     fd.append('file',this.addedImage)
                     fd.append('userId',localStorage.getItem('userId'));
-                    axios.post(server.baseURLDev+"upload/profil-images", fd, config)
+                    axios.post("https://pfe-vinci-back-dev.herokuapp.com/upload/profil-images/", fd, config)
                 } catch(e) {
                     console.log(e);
                 }
@@ -95,11 +97,10 @@ export default {
             this.$forceUpdate()
         },
         editCampus() {
-            axios.patch(server.baseURLProd+"user/"+localStorage.getItem("userId"), this.selectedCampus).then(response=>console.log(response);)
-            this.$forceUpdate()
+            axios.patch(server.baseURLProd+"user/"+localStorage.getItem("userId"), {campus: this.selectedCampus})
         },
         handleAddImage() {
-            this.addedImage = URL.createObjectURL(this.addedImage)
+            this.displayedImage = URL.createObjectURL(this.addedImage)
         }
     },
     computed: {
@@ -109,7 +110,11 @@ export default {
         getCampus: 'user/getCampus',
         getEmail: 'user/getEmail',
         getProfilPic: 'user/getProfilPic'
-        })
+        }),
+        displayedCampus() {
+            this.$store.dispatch('user/searchUserByToken')
+            return this.campus.filter(c=>c.id==this.getCampus)[0].name
+        }
     }
 }
 </script>
