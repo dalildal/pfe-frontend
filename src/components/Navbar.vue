@@ -8,6 +8,7 @@
           placeholder="Recherche d'annonce"
           outlined
           prepend-inner-icon="mdi-magnify"
+          style="width: 50vw"
         ></v-text-field>
         </v-form>
         <v-spacer />
