@@ -35,6 +35,6 @@ window.onload = () => {
     let data = await getData();
     console.log(data);
   }
-  run();
+  run(); run
 }
 */
