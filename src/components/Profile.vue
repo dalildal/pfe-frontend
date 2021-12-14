@@ -48,12 +48,14 @@
         <v-list-item two-line>
             <v-list-item-content>
                 <v-list-item-title>CAMPUS</v-list-item-title>
-                <v-list-item-subtitle v-if="!editMode">{{this.campus[getCampus]}}</v-list-item-subtitle>
+                <v-list-item-subtitle v-if="!editMode">{{this.campus.filter(c=>c.id==getCampus)[0].name}}</v-list-item-subtitle>
                 <v-list-item-subtitle v-else>
                     <v-select
                     v-model="selectedCampus"
                     :items="this.$store.state.campus"
-                    label="Woluwe-Saint-Lambert"
+                    :label="this.campus.filter(c=>c.id==getCampus)[0].name"
+                    item-text="name"
+                    item-value="id"
                     @change="editCampus()"
                     />
                 </v-list-item-subtitle>

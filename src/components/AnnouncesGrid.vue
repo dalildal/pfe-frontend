@@ -57,28 +57,50 @@ export default {
         return {
             users: [],
             announces: [],
+            hover: false,
         }
     },
-    props: ['search'],
+    props: ['search', 'desc', 'campus'],
     mounted () {
         this.$store.state.announces.then(response=>this.announces=response.data)
         this.$store.state.users.then(response=>this.users=response.data)
     },
     methods: {
         getUserAnnounce(id) {
-        let user = this.users.filter(u=>u._id==id)[0]
-        return user.name+" "+user.lastname
+            let user = this.users.filter(u=>u._id==id)[0]
+            return user.name+" "+user.lastname
+        },
+        filtredAnnounces(search, desc, campus) {
+            let aTemp = this.announces;
+            if(search) {
+                aTemp = aTemp.filter(item=>{
+                    return item.title.toLowerCase().includes(search) ||
+                        item.description.toLowerCase().includes(search)
+                })
+            }
+            if(desc===true) {
+                aTemp = aTemp.sort((a,b)=>{return b.price-a.price})
+            } else {
+                aTemp = aTemp.sort((a,b)=>{return a.price-b.price})
+            }
+            if(campus && campus.length>0) {
+                aTemp = aTemp.filter(item=>{
+                    let user = this.users.filter(u=>u._id==item.idUser)[0]
+                    let bool = false
+                    campus.forEach(c=>{
+                        console.log(campus.length);
+                        if(c==user.campus) 
+                            bool = true;
+                    })
+                    return bool;
+                })
+            }
+            return aTemp
         }
     },
     computed: {
         getAnnounces() {
-            if(this.search) {
-                return this.announces.filter(item=>{
-                    return item.title.toLowerCase().includes(this.search)
-                })
-            } else {
-                return this.announces
-            }
+            return this.filtredAnnounces(this.search, this.desc, this.campus)
         }
     }
 }

@@ -26,7 +26,11 @@ export default new Vuex.Store({
       { id: 8, id_announce: '61b32da6077d6f98f1d41319', state: 'removed', to_user: null, read: false},
       { id: 9, id_announce: '61b32da6077d6f98f1d41319', state: 'removed', to_user: null, read: false},
     ],
-    campus: ["Woluwe-Saint-Lambert", "Ixelles","Louvain-La-Neuve"],
+    campus: [
+      {id: 0, name: 'Woluwe-Saint-Lambert'}, 
+      {id: 1, name: 'Ixelles'},
+      {id: 2, name: 'Louvain-La-Neuve'}
+    ],
     categories: [
         {id: 1, name: 'Maison & Jardin'},
         {id: 2, name: 'Famille'},

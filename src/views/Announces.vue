@@ -2,8 +2,8 @@
     <div>
         <navbar />
         <category-bar />
-        <h3 class="pa-5" v-if="this.search!==undefined">Résultat pour "{{this.search}}"</h3>
-        <announces-grid :search="this.search"/>
+        <h3 class="pa-5" v-bind:id="this.search!==undefined?'Résultat pour ':''">{{this.search}}</h3>
+        <announces-grid :search="this.search" :desc="this.desc" :campus="this.campus"/>
     </div>
 </template>
 
@@ -21,12 +21,16 @@ export default {
     },
     data () {
         return {
-            search: undefined
+            search: undefined,
+            desc: undefined,
+            campus: undefined
         }
     },
     mounted () {
+        console.log(this.campus);
         this.search = this.$route.query.search
-        this.$store.state.announces.then(response => (this.announces = response.data))
+        this.desc = this.$route.query.desc
+        this.campus = this.$route.query.campus
     }
 }
 </script>

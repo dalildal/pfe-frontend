@@ -8,29 +8,32 @@
     >
         <v-row class="px-5 pt-5 mr-2">
             <v-select
-                v-model="ascending"
+                v-model="desc"
                 :items="[
                     {
                         label: 'Par ordre croissant',
-                        value: true,
+                        value: false,
                     },
                     {
                         label: 'Par ordre décroissant',
-                        value: false,
+                        value: true,
                     }
                 ]"
                 label="Trier par prix"
                 item-text="label"
                 item-value="value"
+                @change="handleSort"
             >
             </v-select>
             <v-select
                 v-model="selectedCampus"
                 :items="$store.state.campus"
                 label="Campus"
+                item-text="name"
+                item-value="id"
                 multiple
                 prepend-inner-icon=mdi-school-outline
-                @change="editFilter()"
+                @change="handleCampus"
             >
                 <template v-slot:prepend-item>
                     <v-list-item
@@ -137,13 +140,12 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
     name: 'CategoryBar',
     data: () => ({
         selectedCampus: [],
         selectedSubCategory: null,
-        ascending: undefined,
+        desc: undefined,
     }),
     computed: {
         likesAllCampus () {
@@ -175,17 +177,23 @@ export default {
             this.selectedSubCategory = i;
             this.editFilter();
         },
-        editFilter() {
-            console.log(this.selectedCampus, this.selectedSubCategory);
-            axios.put(
-                `/announces`,
-                [
-                    this.selectedCampus,
-                    this.selectedSubCategory
-                ]
-            ).then(data => {
-                console.log(data)
-            });
+        handleCampus() {
+            this.$router.replace({ query: {
+                search: this.$parent.$children[2].$props.search, 
+                desc: this.desc, 
+                campus: this.selectedCampus
+            } })
+            this.$parent.$data.campus = this.selectedCampus
+            this.$parent.$children[2].$props.campus = this.selectedCampus
+        },
+        handleSort() {
+            this.$router.replace({ query: {
+                search: this.$parent.$children[2].$props.search, 
+                desc: this.desc, 
+                campus: this.selectedCampus
+            } })
+            this.$parent.$data.desc = this.desc
+            this.$parent.$children[2].$props.desc = this.desc
         }
     }
 }
