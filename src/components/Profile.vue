@@ -95,7 +95,7 @@ export default {
             this.$forceUpdate()
         },
         editCampus() {
-            axios.patch(server.baseURLProd+"user/"+localStorage.getItem("userId"), this.selectedCampus).then(response=>console.log(response);)
+            axios.patch(server.baseURLProd+"user/"+localStorage.getItem("userId"), this.selectedCampus).then(response=>console.log(response));
             this.$forceUpdate()
         },
         handleAddImage() {
