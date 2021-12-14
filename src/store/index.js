@@ -9,10 +9,10 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     announces: axios.get(
-      server.baseURLProd+'products',
+      server.baseURLDev+'products',
       {headers: {}}
     ),
-    users: axios.get(server.baseURLDev+'user',
+    users: axios.get(server.baseURLProd+'user',
       {headers: {}}
     ),
     notifications: [

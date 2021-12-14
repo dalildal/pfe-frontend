@@ -13,8 +13,10 @@ export default {
 
     actions: {
         login({ commit }, payload) {
-            console.log(payload)
             commit('SET_USERINFO', payload)
+        },
+        logout({ commit }) {
+            commit('DELETE_USERINFO')
         },
         async searchUserByToken( {commit}) {
             let response = await axios.get('http://localhost:3000/user/' + this.state.user.userId,
@@ -28,10 +30,24 @@ export default {
         SET_USERINFO(state, payload ) {
             state.token = payload.token;
             state.userId = payload.user._id;
-            state.user = payload.user;
+            state.name = payload.user.name
+            state.lastname = payload.user.lastname
+            state.campus = payload.user.campus
+            state.email = payload.user.email
             
             localStorage.setItem('token', payload.token)
             localStorage.setItem('userId', payload.user._id)
+        },
+        DELETE_USERINFO(state) {
+            state.token = null;
+            state.userId = null;
+            state.name = null;
+            state.lastname = null;
+            state.campus = null;
+            state.email = null;
+            
+            localStorage.removeItem('token')
+            localStorage.removeItem('userId')
         },
         SET_USER(state, user) {
             state.name = user.name

@@ -27,7 +27,7 @@
                 <v-list-item-title 
                     class="d-flex justify-center"
                 >
-                    <h3 class="pa-3">Julien Van Tongerloo</h3>
+                    <h3 class="pa-3">{{getName+' '+getLastName}}</h3>
                 </v-list-item-title>
             </v-list-item-content>
         </v-list-item>
@@ -42,19 +42,13 @@
         <v-list-item two-line>
             <v-list-item-content>
             <v-list-item-title>EMAIL</v-list-item-title>
-            <v-list-item-subtitle>julien.vantongerloo@student.vinci.be</v-list-item-subtitle>
-            </v-list-item-content>
-        </v-list-item>
-        <v-list-item two-line>
-            <v-list-item-content>
-                <v-list-item-title>TELEPHONE</v-list-item-title>
-                <v-list-item-subtitle>0499/46.73.83</v-list-item-subtitle>
+            <v-list-item-subtitle>{{getEmail}}</v-list-item-subtitle>
             </v-list-item-content>
         </v-list-item>
         <v-list-item two-line>
             <v-list-item-content>
                 <v-list-item-title>CAMPUS</v-list-item-title>
-                <v-list-item-subtitle v-if="!editMode">Woluwe-Saint-Lambert</v-list-item-subtitle>
+                <v-list-item-subtitle v-if="!editMode">{{this.campus[getCampus]}}</v-list-item-subtitle>
                 <v-list-item-subtitle v-else>
                     <v-select
                     v-model="selectedCampus"
@@ -68,16 +62,29 @@
     </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import axios from 'axios';
+import { server } from '../helper';
 export default {
     name: 'Profile',
     data: () => ({
         editMode: false,
         addedImage: null,
         selectedCampus: null,
+        campus: null,
     }),
+    mounted() {
+        this.campus = this.$store.state.campus
+    },
     methods: {
         handleClickEdit() {
+            if(this.editMode) {
+                const config = { headers: { 'Content-Type': 'multipart/form-data' } };
+                let fd = new FormData()
+                fd.append('file',this.addedImage)
+                fd.append('userId',localStorage.getItem('userId'));
+                axios.post(server.baseURLDev+"upload/profil-images", fd, config)
+            }
             this.editMode = !this.editMode
             this.$forceUpdate()
         },
@@ -93,6 +100,14 @@ export default {
         handleAddImage() {
             this.addedImage = URL.createObjectURL(this.addedImage)
         }
+    },
+    computed: {
+        ...mapGetters({
+        getName: 'user/getName',
+        getLastName: 'user/getLastName',
+        getCampus: 'user/getCampus',
+        getEmail: 'user/getEmail',
+        })
     }
 }
 </script>
