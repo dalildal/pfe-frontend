@@ -139,7 +139,8 @@ export default {
         this.$router.push({path: "/announces", query: {search: this.search}})
       else
         this.$router.replace({ query: {search: this.search} })
-        this.$forceUpdate()
+        this.$parent.$data.search = this.search
+        this.$parent.$children[2].$props.search = this.search
     }
   },
   computed: {
