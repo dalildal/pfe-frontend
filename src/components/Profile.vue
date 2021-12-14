@@ -8,7 +8,7 @@
         </v-btn>
         <v-list-item class="d-flex justify-center mt-10 ml-5">
             <v-list-item-avatar width=75% height=auto v-if="editMode">
-                <v-img class='shaking' :src="addedImage?addedImage:'https://randomuser.me/api/portraits/men/78.jpg'"></v-img>
+                <v-img class='shaking' :src="addedImage?addedImage:'https://pfe-vinci-back-dev.herokuapp.com/user/profil-images/'+getProfilPic"></v-img>
                 <v-file-input 
                     style="position: absolute; color: white;" 
                     class="text--white" 
@@ -19,7 +19,7 @@
                 </v-file-input>
             </v-list-item-avatar>
             <v-list-item-avatar width=75% height=auto v-else>
-                <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+                <v-img :src="'https://pfe-vinci-back-dev.herokuapp.com/user/profil-images/'+getProfilPic"></v-img>
             </v-list-item-avatar>
         </v-list-item>
         <v-list-item>
@@ -48,13 +48,15 @@
         <v-list-item two-line>
             <v-list-item-content>
                 <v-list-item-title>CAMPUS</v-list-item-title>
-                <v-list-item-subtitle v-if="!editMode">{{this.campus[getCampus]}}</v-list-item-subtitle>
+                <v-list-item-subtitle v-if="!editMode">{{this.campus.filter(c=>c.id==this.getCampus)[0].name}}</v-list-item-subtitle>
                 <v-list-item-subtitle v-else>
                     <v-select
                     v-model="selectedCampus"
                     :items="this.$store.state.campus"
-                    label="Woluwe-Saint-Lambert"
-                    @change="editCampus()"
+                    :label="this.campus.filter(c=>c.id==this.getCampus)[0].name"
+                    item-text="name"
+                    item-value="id"
+                    @change="editCampus"
                     />
                 </v-list-item-subtitle>
             </v-list-item-content>
@@ -79,23 +81,22 @@ export default {
     methods: {
         handleClickEdit() {
             if(this.editMode) {
-                const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-                let fd = new FormData()
-                fd.append('file',this.addedImage)
-                fd.append('userId',localStorage.getItem('userId'));
-                axios.post(server.baseURLDev+"upload/profil-images", fd, config)
+                try {
+                    const config = { headers: { 'Content-Type': 'multipart/form-data' } };
+                    let fd = new FormData()
+                    fd.append('file',this.addedImage)
+                    fd.append('userId',localStorage.getItem('userId'));
+                    axios.post(server.baseURLDev+"upload/profil-images", fd, config)
+                } catch(e) {
+                    console.log(e);
+                }
             }
             this.editMode = !this.editMode
             this.$forceUpdate()
         },
         editCampus() {
-            console.log(this.selectedCampus);
-            axios.put(
-                '/profile/campus',
-                this.selectedCampus
-            ).then(data => {
-                console.log(data)
-            });
+            axios.patch(server.baseURLProd+"user/"+localStorage.getItem("userId"), this.selectedCampus).then(response=>console.log(response);)
+            this.$forceUpdate()
         },
         handleAddImage() {
             this.addedImage = URL.createObjectURL(this.addedImage)
@@ -107,6 +108,7 @@ export default {
         getLastName: 'user/getLastName',
         getCampus: 'user/getCampus',
         getEmail: 'user/getEmail',
+        getProfilPic: 'user/getProfilPic'
         })
     }
 }

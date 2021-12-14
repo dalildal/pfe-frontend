@@ -8,6 +8,7 @@
           placeholder="Recherche d'annonce"
           outlined
           prepend-inner-icon="mdi-magnify"
+          style="width: 50vw"
         ></v-text-field>
         </v-form>
         <v-spacer />
@@ -136,10 +137,15 @@ export default {
     },
     handleSearchSubmit() {
       if(this.$route.path!="/announces")
-        this.$router.push({path: "/announces", query: {search: this.search}})
+        this.$router.push({path: "/announces", query: {search: this.search, desc: this.$parent.$children[2].$props.desc}})
       else
-        this.$router.replace({ query: {search: this.search} })
-        this.$forceUpdate()
+        this.$router.replace({ query: {
+          search: this.search, 
+          desc: this.$parent.$children[2].$props.desc,
+          campus: this.$parent.$children[2].$props.campus
+        } })
+        this.$parent.$data.search = this.search
+        this.$parent.$children[2].$props.search = this.search
     }
   },
   computed: {
