@@ -81,11 +81,15 @@ export default {
     methods: {
         handleClickEdit() {
             if(this.editMode) {
-                const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-                let fd = new FormData()
-                fd.append('file',this.addedImage)
-                fd.append('userId',localStorage.getItem('userId'));
-                axios.post(server.baseURLDev+"upload/profil-images", fd, config)
+                try {
+                    const config = { headers: { 'Content-Type': 'multipart/form-data' } };
+                    let fd = new FormData()
+                    fd.append('file',this.addedImage)
+                    fd.append('userId',localStorage.getItem('userId'));
+                    axios.post(server.baseURLDev+"upload/profil-images", fd, config)
+                } catch(e) {
+                    console.log(e);
+                }
             }
             this.editMode = !this.editMode
             this.$forceUpdate()

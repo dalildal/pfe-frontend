@@ -9,7 +9,7 @@
             xl="3"
             class="px-5"
         >
-            <v-card elevation="0">
+            <v-card elevation="0" @click="redirectToAnnounce(announce.id)">
             <v-img
                 src="../assets/home.png"
                 class="white--text align-end"
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+
 export default {
     name: 'AnnouncesGrid',
     data () {
@@ -108,5 +109,7 @@ export default {
             return this.filtredAnnounces(this.search, this.desc, this.campus, this.subcat)
         }
     }
+
+    
 }
 </script>
