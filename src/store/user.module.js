@@ -9,6 +9,7 @@ export default {
         campus: null,
         email: null,
         token: localStorage.getItem('token'),
+        url_profil_pic: null,
         userProduct : [],
         users: []
     },
@@ -65,6 +66,7 @@ export default {
             state.lastname = payload.user.lastname
             state.campus = payload.user.campus
             state.email = payload.user.email
+            state.url_profil_pic = payload.user.url_profil_pic
             
             localStorage.setItem('token', payload.token)
             localStorage.setItem('userId', payload.user._id)
@@ -76,6 +78,7 @@ export default {
             state.lastname = null;
             state.campus = null;
             state.email = null;
+            state.url_profil_pic = null
             
             localStorage.removeItem('token')
             localStorage.removeItem('userId')
@@ -85,6 +88,7 @@ export default {
             state.lastname = user.lastname
             state.campus = user.campus
             state.email = user.email
+            state.url_profil_pic = user.url_profil_pic
         }
     },
     getters : {
@@ -106,6 +110,9 @@ export default {
         },
         getUserList(state) {
             return state.users
+        },
+        getProfilPic(state) {
+            return state.url_profil_pic
         }
     }
 
