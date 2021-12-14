@@ -42,6 +42,7 @@
 import axios from "axios";
 import SignUpCanva from "../components/SignUpCanva.vue";
 import User from "../models/user.js";
+import { server } from '../helper';
 // import { mapMutations } from "vuex"
 
 export default {
@@ -60,7 +61,7 @@ export default {
 
     async handleLogin() {
       await axios
-        .post("http://localhost:3000/user/login", this.user)
+        .post(server.baseURLProd+"user/login", this.user)
         .then((response) => {
           if (response.data.access_token) {
             let payload = {
