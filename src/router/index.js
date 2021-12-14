@@ -9,6 +9,7 @@ import ProductDetail from '../views/ProductDetail.vue'
 import Modo from '../views/Modo.vue'
 import AddAnnounce from '../views/AddAnnounce.vue'
 import Error from '../views/Error.vue'
+import AddCategory from '../views/AddCategory.vue'
 
 Vue.use(VueRouter)
 
@@ -61,11 +62,16 @@ const routes = [
     name: 'AddAnnounce',
     component: AddAnnounce
   },
-  { 
-    path: "*", 
-    name: "Error", 
-    component: Error 
-  }
+  {
+    path: "*",
+    name: "Error",
+    component: Error
+  },
+  {
+    path: '/addcategory',
+    name: 'AddCategory',
+    component: AddCategory
+  },
 ]
 
 const router = new VueRouter({
