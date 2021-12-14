@@ -1,4 +1,5 @@
 import axios from "axios";
+import {server} from "../helper"
 
 export default {
     namespaced: true,
@@ -32,7 +33,7 @@ export default {
             commit('DELETE_USERINFO')
         },
         async searchUserByToken( {commit}) {
-            const response = await axios.get('http://localhost:3000/user/' + this.state.user.userId,
+            const response = await axios.get(server.baseURLProd+'user/' + this.state.user.userId,
             { headers: {
                 'Authorization': `Bearer ${this.state.user.token}`
             }})
@@ -40,7 +41,7 @@ export default {
         },
 
         searchUserById( {commit}, idUserProduct) {
-            axios.get('http://localhost:3000/user/' + idUserProduct)
+            axios.get(server.baseURLProd+'user/' + idUserProduct)
             .then(response => {
                 commit('SET_USERPRODUCT', response.data)
                 console.log(response.data)
