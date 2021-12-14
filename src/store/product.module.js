@@ -28,16 +28,20 @@ export default {
         },
 
         getProductsOnHold({commit}) {
-            axios.get('http://localhost:3000/products/onHold',
+            return new Promise((resolve,reject) => {
+                axios.get('http://localhost:3000/products/onHold',
                 {
                     headers: {}
                 }).then(response => {
                     commit('SET_PRODUCTS', response.data)
-                    console.log(response.data);
+                    resolve(response)
                 })
                 .catch(error => {
                     console.log(error);
+                    reject(error)
                 })
+            })
+            
         },
 
         getProduct({ commit }, product) {
@@ -57,8 +61,11 @@ export default {
         updateProduct({commit} ,payload) {
             commit('SET_PRODUCT',payload)
             console.log(payload)
-            payload.state = 'En attente'
+            payload.state = 'A vendre'
             axios.patch('http://localhost:3000/products/' + payload._id, payload)
+            .then( ()  => {
+                commit('REMOVE_PRODUCT', payload._id)
+            })
         }
     },
 
@@ -66,6 +73,7 @@ export default {
         SET_PRODUCTS(state, products) {
             state.products = products
         },
+        
 
         SET_PRODUCT(state, product) {
             state.idProduct = product.idProduct
@@ -75,7 +83,14 @@ export default {
             state.description = product.description
             state.price = product.price
             state.adress = product.adress
-        }
+        },
+
+        REMOVE_PRODUCT(state, id) {
+            const index = state.products.findIndex(product => product._id === id)
+            console.log(state.products);
+            console.log(index);
+            state.products.splice(index,1);
+        },
     },
 
     getters: {

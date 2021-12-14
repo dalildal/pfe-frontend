@@ -160,17 +160,15 @@ export default {
   mounted() {
     this.geolocate();
     
-    const productt = {
+    const productPath = {
       productId : this.$route.params.pathMatch
     }
-    this.$store.dispatch('product/getProduct', productt.productId)
+    this.$store.dispatch('product/getProduct', productPath.productId)
     .then(response => {
       const product = response.data;
       this.$store.dispatch('user/searchUserById', product.idUser)
     })
-    
-    
-    
+ 
   },
 
   methods: {

@@ -81,8 +81,6 @@ export default {
         redirectToAnnounce(id) {
             this.$router.push({path:'/product/'+id})
         }        
-    }
-
-    
+    }  
 }
 </script>
