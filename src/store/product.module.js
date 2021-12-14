@@ -3,42 +3,73 @@ import axios from "axios";
 export default {
     namespaced: true,
     state: {
-        productId: null,
+        idProduct: null,
+        idUser: null,
         state: null,
         title: null,
         description: null,
-        price : null,
-        adress : null,
-        products : []
+        price: null,
+        adress: null,
+        products: []
     },
 
-    actions : {
-        getProducts({commit}) {
-            axios.get('http://localhost:3000/products', 
-            { headers: {}
-            }).then(response => {
-                commit('SET_PRODUCTS', response.data)
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.log(error);
+    actions: {
+        getProducts({ commit }) {
+            axios.get('http://localhost:3000/products',
+                {
+                    headers: {}
+                }).then(response => {
+                    commit('SET_PRODUCTS', response.data)
+                    console.log(response.data);
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+
+        getProductsOnHold({commit}) {
+            axios.get('http://localhost:3000/products/onHold',
+                {
+                    headers: {}
+                }).then(response => {
+                    commit('SET_PRODUCTS', response.data)
+                    console.log(response.data);
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+
+        getProduct({ commit }, product) {
+            return new Promise((resolve, reject) => {
+                axios.get('http://localhost:3000/products/' + product)
+                    .then(response => {
+                        commit('SET_PRODUCT', response.data)
+                        resolve(response)
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        reject(error)
+                    })
             })
         },
 
-        async getProduct( { commit },payload) {
-            //console.log(payload)
-            const response = await axios.get('http://localhost:3000/products/' + payload)
-            commit('SET_PRODUCT', response.data)
+        updateProduct({commit} ,payload) {
+            commit('SET_PRODUCT',payload)
+            console.log(payload)
+            payload.state = 'En attente'
+            axios.patch('http://localhost:3000/products/' + payload._id, payload)
         }
     },
 
-    mutations : {
-        SET_PRODUCTS(state, products){
+    mutations: {
+        SET_PRODUCTS(state, products) {
             state.products = products
         },
 
         SET_PRODUCT(state, product) {
-            state.productId = product.productId
+            state.idProduct = product.idProduct
+            state.idUser = product.idUser
             state.state = product.state
             state.title = product.title
             state.description = product.description
@@ -47,9 +78,9 @@ export default {
         }
     },
 
-    getters : {
-        getProductId(state) {
-            return state.productId
+    getters: {
+        getidProduct(state) {
+            return state.idProduct
         },
         getState(state) {
             return state.state

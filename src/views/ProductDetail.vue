@@ -95,7 +95,7 @@
               <v-card height="200" width="100%">
                 <v-list>
                   <v-list-item>
-                    <v-list-item class="pl-0">Chris</v-list-item>
+                    <v-list-item class="pl-0">{{userProduct.name}}</v-list-item>
                     <v-list-item-avatar>
                       <v-img
                         src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
@@ -129,7 +129,7 @@
 </template>
 
 <script>
-import { mapGetters} from 'vuex'
+import { mapGetters, mapState} from 'vuex'
 
 export default {
   name: "ProductDetail",
@@ -159,13 +159,18 @@ export default {
 
   mounted() {
     this.geolocate();
-    //console.log(this.$route.params);
-
-    const payload = {
+    
+    const productt = {
       productId : this.$route.params.pathMatch
     }
-    console.log(payload)
-    this.$store.dispatch('product/getProduct', payload.productId)
+    this.$store.dispatch('product/getProduct', productt.productId)
+    .then(response => {
+      const product = response.data;
+      this.$store.dispatch('user/searchUserById', product.idUser)
+    })
+    
+    
+    
   },
 
   methods: {
@@ -200,7 +205,12 @@ export default {
       getTitle : 'product/getTitle',
       getDescription : 'product/getDescription',
       getPrice : 'product/getPrice'
+    }),
+
+    ...mapState({
+      userProduct : state => state.user.userProduct
     })
+    
   }
 };
 </script>

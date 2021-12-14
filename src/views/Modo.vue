@@ -44,14 +44,18 @@
             > {{product.title}}
             <div>
               <v-chip width="10px" class="ma-2" color="green" outlined>
-                Utilisateur vérifié
+               annonces en attentes
               </v-chip>
             </div>
             </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <v-btn class="ma-2" color="red" dark>
-              Bannir
-              <v-icon dark right> mdi-cancel </v-icon>
+            <v-container>
+                <p>prix : {{ product.price }}</p>
+                <p>descrition : {{ product.description }}</p>
+              </v-container>
+            <v-btn class="ma-2" color="green" dark @click="updateProduct(product)">
+              Confirmé l'annonces
+              <v-icon dark right> mdi-checkbox-marked-circle </v-icon>
             </v-btn>
           </v-expansion-panel-content>
         </v-expansion-panel>
@@ -62,7 +66,7 @@
 
 <script>
 import Navbar from "../components/Navbar";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   components: { Navbar },
@@ -80,12 +84,16 @@ export default {
     },
     activeAnnouncesList () {
       this.userIsActive = false
-    }
+    },
+
+    ...mapActions({
+      updateProduct : 'product/updateProduct'
+    })
   },
 
   mounted() {
     this.$store.dispatch("user/getUsers");
-    this.$store.dispatch("product/getProducts");
+    this.$store.dispatch("product/getProductsOnHold");
   },
 
   computed: {

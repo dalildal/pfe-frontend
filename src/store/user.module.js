@@ -9,6 +9,7 @@ export default {
         campus: null,
         email: null,
         token: localStorage.getItem('token'),
+        userProduct : [],
         users: []
     },
 
@@ -24,7 +25,6 @@ export default {
         },
 
         login({ commit }, payload) {
-            console.log(payload)
             commit('SET_USERINFO', payload)
         },
         async searchUserByToken( {commit}) {
@@ -33,11 +33,26 @@ export default {
                 'Authorization': `Bearer ${this.state.user.token}`
             }})
             commit('SET_USER', response.data)
+        },
+
+        searchUserById( {commit}, idUserProduct) {
+            axios.get('http://localhost:3000/user/' + idUserProduct)
+            .then(response => {
+                commit('SET_USERPRODUCT', response.data)
+                console.log(response.data)
+            })
+            .catch(error => {
+                console.log(error);
+            })
         }
     },
     mutations: {
         SET_USERS(state, users) {
             state.users = users
+        },
+
+        SET_USERPRODUCT(state, userProduct) {
+            state.userProduct = userProduct
         },
 
         SET_USERINFO(state, payload ) {
