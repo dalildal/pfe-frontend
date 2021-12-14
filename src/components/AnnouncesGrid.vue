@@ -9,9 +9,9 @@
             xl="3"
             class="px-5"
         >
-            <v-card elevation="0">
+            <v-card elevation="0" @click="redirectToAnnounce(announce.id)">
             <v-img
-                src="../assets/home.png"
+                :src="'https://pfe-vinci-back-dev.herokuapp.com/products/product-images/'+announce.liste[0]"
                 class="white--text align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                 height="200px"
@@ -26,12 +26,12 @@
                     <v-img
                     class="elevation-6"
                     alt=""
-                    src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                    :src="'https://pfe-vinci-back-dev.herokuapp.com/user/profil-images/'+getUserAnnounce(announce.idUser).pp"
                     ></v-img>
                 </v-list-item-avatar>
                 <v-row>
                     <v-list-item-content>
-                    <v-list-item-title>{{getUserAnnounce(announce.idUser)}}</v-list-item-title>
+                    <v-list-item-title>{{getUserAnnounce(announce.idUser).fullname}}</v-list-item-title>
                     </v-list-item-content>
                     <v-tooltip top>
                     <template v-slot:activator="{ on, attrs }">
@@ -62,13 +62,17 @@ export default {
     },
     props: ['search', 'desc', 'campus', 'subcat'],
     mounted () {
-        this.$store.state.announces.then(response=>this.announces=response.data)
+        this.$store.state.announces.then(response=>{this.announces=response.data;})
         this.$store.state.users.then(response=>this.users=response.data)
     },
     methods: {
         getUserAnnounce(id) {
             let user = this.users.filter(u=>u._id==id)[0]
-            return user.name+" "+user.lastname
+            console.log(user.url_profil_pic);
+            return {
+                fullname: user.name+" "+user.lastname,
+                pp: user.url_profil_pic
+            }
         },
         filtredAnnounces(search, desc, campus, subcat) {
             let aTemp = this.announces;
@@ -101,6 +105,9 @@ export default {
                 })
             }
             return aTemp
+        },
+        redirectToAnnounce(id) {
+            this.$router.push({path:'/product/'+id})
         }
     },
     computed: {
@@ -108,5 +115,7 @@ export default {
             return this.filtredAnnounces(this.search, this.desc, this.campus, this.subcat)
         }
     }
+
+    
 }
 </script>

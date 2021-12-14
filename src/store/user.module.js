@@ -8,10 +8,23 @@ export default {
         name: null,
         campus: null,
         email: null,
-        token: localStorage.getItem('token')
+        token: localStorage.getItem('token'),
+        url_profil_pic: null,
+        userProduct : [],
+        users: []
     },
 
     actions: {
+        getUsers({commit}) {
+            axios.get('http://localhost:3000/user')
+            .then(response => {
+                commit('SET_USERS', response.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        },
+
         login({ commit }, payload) {
             commit('SET_USERINFO', payload)
         },
@@ -19,14 +32,33 @@ export default {
             commit('DELETE_USERINFO')
         },
         async searchUserByToken( {commit}) {
-            let response = await axios.get('http://localhost:3000/user/' + this.state.user.userId,
+            const response = await axios.get('http://localhost:3000/user/' + this.state.user.userId,
             { headers: {
                 'Authorization': `Bearer ${this.state.user.token}`
             }})
             commit('SET_USER', response.data)
+        },
+
+        searchUserById( {commit}, idUserProduct) {
+            axios.get('http://localhost:3000/user/' + idUserProduct)
+            .then(response => {
+                commit('SET_USERPRODUCT', response.data)
+                console.log(response.data)
+            })
+            .catch(error => {
+                console.log(error);
+            })
         }
     },
     mutations: {
+        SET_USERS(state, users) {
+            state.users = users
+        },
+
+        SET_USERPRODUCT(state, userProduct) {
+            state.userProduct = userProduct
+        },
+
         SET_USERINFO(state, payload ) {
             state.token = payload.token;
             state.userId = payload.user._id;
@@ -34,6 +66,7 @@ export default {
             state.lastname = payload.user.lastname
             state.campus = payload.user.campus
             state.email = payload.user.email
+            state.url_profil_pic = payload.user.url_profil_pic
             
             localStorage.setItem('token', payload.token)
             localStorage.setItem('userId', payload.user._id)
@@ -45,6 +78,7 @@ export default {
             state.lastname = null;
             state.campus = null;
             state.email = null;
+            state.url_profil_pic = null
             
             localStorage.removeItem('token')
             localStorage.removeItem('userId')
@@ -54,6 +88,7 @@ export default {
             state.lastname = user.lastname
             state.campus = user.campus
             state.email = user.email
+            state.url_profil_pic = user.url_profil_pic
         }
     },
     getters : {
@@ -72,6 +107,12 @@ export default {
         },
         getCampus(state) {
             return state.campus
+        },
+        getUserList(state) {
+            return state.users
+        },
+        getProfilPic(state) {
+            return state.url_profil_pic
         }
     }
 
