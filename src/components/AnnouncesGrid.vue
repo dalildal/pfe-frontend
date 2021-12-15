@@ -16,7 +16,9 @@
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                 height="200px"
             >
-                <v-card-title>{{announce.title}}</v-card-title><v-card-title>{{announce.price}}€</v-card-title>
+                <v-card-title>{{announce.title}}</v-card-title>
+                <v-card-title v-if="announce.price>0">{{announce.price}}€</v-card-title>
+                <v-card-title v-else>À donner</v-card-title>
                 <v-card-subtitle v-if="!hover" v-text="announce.description" />
                 
             </v-img>
@@ -33,15 +35,6 @@
                     <v-list-item-content>
                     <v-list-item-title>{{getUserAnnounce(announce.idUser).fullname}}</v-list-item-title>
                     </v-list-item-content>
-                    <v-tooltip top>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn icon v-bind="attrs" v-on="on">
-                        <v-icon>mdi-star</v-icon>
-                        <span>4,5</span>
-                        </v-btn>
-                    </template>
-                    <span>Utilisateur recommandé</span>
-                    </v-tooltip>
                 </v-row>
                 </v-list-item>
             </v-card-actions>
