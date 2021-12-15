@@ -45,7 +45,6 @@ export default {
             axios.get(server.baseURLProd+'user/' + idUserProduct)
             .then(response => {
                 commit('SET_USERPRODUCT', response.data)
-                
             })
             .catch(error => {
                 console.log(error);

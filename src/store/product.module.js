@@ -9,7 +9,7 @@ export default {
         title: null,
         description: null,
         price: null,
-        adress: null,
+        address: null,
         products: []
     },
 
@@ -49,6 +49,7 @@ export default {
                 axios.get('http://localhost:3000/products/' + product)
                     .then(response => {
                         commit('SET_PRODUCT', response.data)
+                        console.log(response.data);
                         resolve(response)
                     })
                     .catch(error => {
@@ -81,7 +82,7 @@ export default {
             state.title = product.title
             state.description = product.description
             state.price = product.price
-            state.adress = product.adress
+            state.address = product.address
         },
 
         REMOVE_PRODUCT(state, id) {
@@ -109,7 +110,7 @@ export default {
             return state.price
         },
         getAdress(state) {
-            return state.adress
+            return state.address
         }
     }
 
