@@ -45,11 +45,13 @@
               <v-col cols="12">
                 <v-card elevation="0">
                   <v-row class="pt-5 px-10">
-                    <v-col cols=10>
+                    <v-col>
                       <h1>Fil d'actualité</h1>
                     </v-col>
-                    <v-col cols=2>
-                      <v-btn rounded elevation="0" color=#158aaf href="/announces">Voir tout</v-btn>
+                    <v-col align-self="center">
+                      <v-row justify="end">
+                        <v-btn rounded elevation="0" color=#158aaf href="/announces">Voir tout</v-btn>
+                      </v-row>
                     </v-col>
                   </v-row>
                   <announces-grid :desc="true"/>
@@ -63,7 +65,10 @@
             <v-row dense>
               <v-col>
                 <v-card max-width="400" class="mx-auto">
-                  <h3 class="pa-5">Mes ventes</h3>
+                  <v-card-title class="pa-5">
+                    <v-icon>mdi-storefront-outline</v-icon>
+                    <h3 class="ml-2">Mes annonces</h3>
+                  </v-card-title>
                   <v-virtual-scroll
                     :bench="benched"
                     :items="this.myannounces"
@@ -73,14 +78,14 @@
                     <template v-slot:default="{ item }">
                       <v-list-item two-line :key="item.id">
                         <v-list-item-avatar tile>
-                          <v-img tile :src="item.src" />
+                          <v-img tile :src="'https://pfe-vinci-back-dev.herokuapp.com/products/product-images/'+item.liste[0]" />
                         </v-list-item-avatar>
                         <v-list-item-content>
                           <v-list-item-title>
                             {{ item.title }}
                           </v-list-item-title>
                           <v-list-item-subtitle>
-                            {{ item.desc }}
+                            {{ item.state }}
                           </v-list-item-subtitle>
                         </v-list-item-content>
                       </v-list-item>
@@ -90,7 +95,10 @@
                   </v-virtual-scroll>
                 </v-card>
                 <v-card max-width="400" class="mx-auto mt-5">
-                  <h3 class="pa-5">Chats</h3>
+                  <v-card-title>
+                    <v-icon>mdi-chat-outline</v-icon>
+                    <h3 class="ml-2">Chats</h3>
+                  </v-card-title>
                   <v-virtual-scroll
                     :bench="benched"
                     :items="this.users"
@@ -146,6 +154,7 @@ export default {
   mounted () {
     this.$store.state.announces.then(response => (this.announces = response.data))
     this.$store.state.users.then(response => (this.users = response.data))
+    this.$store.state.myannounces.then(response=>(this.myannounces=response.data))
   },
   methods: {
     getUserAnnounce(id) {
