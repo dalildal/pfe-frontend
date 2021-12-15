@@ -49,7 +49,7 @@
                   </v-list-item-icon>
                 </v-list-item>
               </template>
-              <template v-else v-slot:activator="{on, attrs}">
+              <template v-else-if="isLoggedIn" v-slot:activator="{on, attrs}">
                 <v-list-item @click="handleLogout()">
                   <v-list-item-icon>
                         <v-icon v-bind:color="$route.path==item.href?'#158aaf':''" large v-bind="attrs" v-on="on">{{item.icon}}</v-icon>
@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
     name: 'Sidebar',
     data: () => ({
@@ -107,6 +108,12 @@ export default {
     if(theme) {
       theme=="true"?this.$vuetify.theme.dark = true : this.$vuetify.theme.dark = false;
     }
+    this.$store.dispatch('user/searchUserByToken')
+  },
+  computed: {
+    ...mapGetters({
+      isLoggedIn: 'user/isLoggedIn'
+    }),      
   }
 }
 </script>

@@ -17,6 +17,7 @@
                                     md="8" sm="12"
                                 >
                                     <v-text-field
+                                        v-model="announce.title"
                                         label="Titre"
                                         outlined
                                         :rules="rules"
@@ -31,6 +32,7 @@
                                     md="8" sm="12"
                                 >
                                     <v-textarea
+                                        v-model="announce.description"
                                         label="Description"
                                         outlined
                                         :rules="rules"
@@ -61,6 +63,7 @@
                                     md="8" sm="12"
                                 >
                                     <v-text-field
+                                        v-model="announce.price"
                                         label="Prix"
                                         outlined
                                         :rules="rules"
@@ -177,7 +180,11 @@
 </template>
 
 <script> //titre, desc, prix, cat
+import axios from 'axios'
+import { mapGetters } from 'vuex'
 import Navbar from '../components/Navbar.vue'
+import Announce from '../store/product.module'
+import { server } from '../helper'
 export default {
     name: 'AddAnnounce',
     components: {
@@ -196,11 +203,13 @@ export default {
             value=>!!value||'Champs obligatoire'
         ],
         valid: true,
+        announce: new Announce('',localStorage.getItem('userId'),'En attente','','','','','')
       }
     },
     mounted () {
-        this.categories = this.$store.state.categories
-        this.subcategories = this.$store.state.subcategories
+        if(!this.isLoggedIn) this.$router.push("/")
+        this.$store.state.categories.then(response=>(this.categories=response.data))
+        this.$store.state.subcategories.then(response=>(this.subcategories=response.data))
     },
     methods: {
         handleAddImage() {
@@ -209,10 +218,34 @@ export default {
             )
         },
         validate() {
-            console.log(this.$refs.form.validate())
             this.$refs.form.validate()
+            axios.post(server.baseURLProd+"products", {
+                idUser: localStorage.getItem('userId'),
+                state: "En attente",
+                title: this.announce.title,
+                description: this.announce.description,
+                price: this.announce.price,
+                idCategory: this.announce.category,
+                address: this.getUser.campus
+            }, {headers: {}})
+                .then(response=>{
+                    let id = response.data
+                    const config = { headers: { 'Content-Type': 'multipart/form-data' } };
+                    this.images.forEach(i=>{
+                        let fd = new FormData()
+                        fd.append('file',i)
+                        fd.append('userId',id);
+                        axios.post(server.baseURLProd+"upload/product-images", fd, config)
+                    })
+                })
         }
 
+    },
+    computed: {
+        ...mapGetters({
+            isLoggedIn: 'user/isLoggedIn',
+            getUser: 'user/searchUserByToken'
+       }),        
     }
 }
 </script>

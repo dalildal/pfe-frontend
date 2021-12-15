@@ -24,6 +24,7 @@
                 v-model="user.password"
                 label="Mot de passe"
                 outlined
+                type="password"
                 append-icon="mdi-lock-outline"
               />
               <v-btn type="submit" block large elevation="0" color="#158aaf">

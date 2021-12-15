@@ -9,6 +9,7 @@
                 <v-col>
                     <transition name="fade">
                         <router-view></router-view>
+                        <v-alert id="alert"></v-alert>
                     </transition>
                 </v-col>
             </v-row>
