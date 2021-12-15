@@ -1,19 +1,18 @@
 <template>
   <v-row class="pt-5 px-9">
       <v-layout class="mb-5">
-        <v-autocomplete
-          v-model="select"
-          :loading="loading"
-          :items="this.announces"
-          :search-input.sync="search"
-          cache-items
-          flat
-          hide-no-data
-          hide-details
-          label="Rechercher ..."
-          solo-inverted
-        ></v-autocomplete>
+        <v-form @submit.prevent="handleSearchSubmit">
+        <v-text-field
+          v-model="search"
+          label="Recherche"
+          placeholder="Recherche d'annonce"
+          outlined
+          prepend-inner-icon="mdi-magnify"
+          style="width: 50vw"
+        ></v-text-field>
+        </v-form>
         <v-spacer />
+        <template v-if="this.isLoggedIn">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }"
               class="pt-5">
@@ -85,6 +84,15 @@
           </template>
           <span>Profile</span>
         </v-tooltip>
+        </template>
+        <template v-else>
+          <v-btn class="mt-2" elevation="0" href="/login">
+            <v-icon>
+              mdi-account-outline
+            </v-icon>
+            Se connecter
+          </v-btn>
+        </template>
       </v-layout>
     </v-row>
 </template>
@@ -103,13 +111,13 @@ export default {
       select: undefined,
       search: undefined,
       loading: undefined,
-      announces: undefined,
-      notif: undefined,
+      announces: [],
+      notif: [],
     }
   },
   mounted () {
-    this.$store.state.announces.then(response => (this.announces = response.data))
-    this.$store.dispatch('user/searchUserByToken')
+    this.$store.state.announces.then(response => this.announces=response.data)
+    this.isLoggedIn?this.$store.dispatch('user/searchUserByToken'):null
   },
   methods: {
     notificationRender(i) {
@@ -126,14 +134,24 @@ export default {
     },
     handleNotifClick() {
       this.$store.state.notifications.forEach(n=>n.read=true)
+    },
+    handleSearchSubmit() {
+      if(this.$route.path!="/announces")
+        this.$router.push({path: "/announces", query: {search: this.search, desc: this.$parent.$children[2].$props.desc}})
+      else
+        this.$router.replace({ query: {
+          search: this.search, 
+          desc: this.$parent.$children[2].$props.desc,
+          campus: this.$parent.$children[2].$props.campus
+        } })
+        this.$parent.$data.search = this.search
+        this.$parent.$children[2].$props.search = this.search
     }
   },
   computed: {
     ...mapGetters({
       getName: 'user/getName',
-      getLastName: 'user/getLastName',
-      getCampus: 'user/getCampus',
-      getEmail: 'user/getEmail',
+      isLoggedIn: 'user/isLoggedIn'
     })
   }
 }

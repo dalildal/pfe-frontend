@@ -52,21 +52,21 @@
                       <v-btn rounded elevation="0" color=#158aaf href="/announces">Voir tout</v-btn>
                     </v-col>
                   </v-row>
-                  <announces-grid :to_filter="false" />
+                  <announces-grid />
                 </v-card>
               </v-col>
             </v-row>
           </v-container>
         </v-col>
         <v-col class="hidden-sm-and-down" md="4" lg="3">
-          <v-container fluid>
+          <v-container fluid style="position: sticky; top: 10vh">
             <v-row dense>
               <v-col>
                 <v-card max-width="400" class="mx-auto">
                   <h3 class="pa-5">Mes ventes</h3>
                   <v-virtual-scroll
                     :bench="benched"
-                    :items="this.announces"
+                    :items="this.myannounces"
                     height="250"
                     item-height="64"
                   >
@@ -140,6 +140,7 @@ export default {
       users: undefined,
       benched: undefined,
       hover: undefined,
+      myannounces: []
     }
   },
   mounted () {
@@ -156,7 +157,6 @@ export default {
     ...mapGetters({
       isLoggedIn: 'user/isLoggedIn',
     }),
-    user() { return this.$store.state.user}
   },
 };
 </script>

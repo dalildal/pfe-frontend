@@ -67,6 +67,7 @@
     import SignUpCanva from '../components/SignUpCanva.vue'
     import User from '../models/user.js'
     import axios from 'axios';
+import { server } from '../helper';
 
     export default {
         name: 'Register',
@@ -82,7 +83,7 @@
 
         methods: {
             handleRegister() {
-                axios.post('http://localhost:3000/user/register',this.user)
+                axios.post(server.baseURLProd+'user/register',this.user)
                 this.$router.push({path: '/login'})
 
             },

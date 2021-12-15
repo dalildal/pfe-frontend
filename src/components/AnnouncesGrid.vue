@@ -1,7 +1,7 @@
 <template>
     <v-row class="px-2">
         <v-col
-            v-for="announce in this.announces"
+            v-for="announce in this.getAnnounces"
             :key="announce.id"
             xs="12"
             sm="6"
@@ -11,7 +11,7 @@
         >
             <v-card elevation="0" @click="redirectToAnnounce(announce.id)">
             <v-img
-                src="../assets/home.png"
+                :src="'https://pfe-vinci-back-dev.herokuapp.com/products/product-images/'+announce.liste[0]"
                 class="white--text align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                 height="200px"
@@ -26,12 +26,12 @@
                     <v-img
                     class="elevation-6"
                     alt=""
-                    src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                    :src="'https://pfe-vinci-back-dev.herokuapp.com/user/profil-images/'+getUserAnnounce(announce.idUser).pp"
                     ></v-img>
                 </v-list-item-avatar>
                 <v-row>
                     <v-list-item-content>
-                    <v-list-item-title>{{getUserAnnounce(announce.idUser)}}</v-list-item-title>
+                    <v-list-item-title>{{getUserAnnounce(announce.idUser).fullname}}</v-list-item-title>
                     </v-list-item-content>
                     <v-tooltip top>
                     <template v-slot:activator="{ on, attrs }">
@@ -51,36 +51,71 @@
 </template>
 
 <script>
-
 export default {
     name: 'AnnouncesGrid',
     data () {
         return {
-            announces: undefined,
-            users: undefined,
+            users: [],
+            announces: [],
+            hover: false,
         }
     },
-    props: {
-        to_filter: Boolean,
-    },
+    props: ['search', 'desc', 'campus', 'subcat'],
     mounted () {
-        if(this.to_filter) {
-            this.$store.state.announces.then(response => (this.announces = response.data))
-        } else {
-            this.$store.state.announces.then(response => (this.announces = response.data.reverse()))
-        }
-        this.$store.state.users.then(response => (this.users = response.data))
-        //this.$store.dispatch('product/getProduct')
+        this.$store.state.announces.then(response=>{this.announces=response.data;})
+        this.$store.state.users.then(response=>this.users=response.data)
     },
     methods: {
         getUserAnnounce(id) {
-        let user = this.users.filter(u=>u._id==id)[0]
-        return user.name+" "+user.lastname
+            let user = this.users.filter(u=>u._id==id)[0]
+            console.log(user.url_profil_pic);
+            return {
+                fullname: user.name+" "+user.lastname,
+                pp: user.url_profil_pic
+            }
         },
-
+        filtredAnnounces(search, desc, campus, subcat) {
+            let aTemp = this.announces;
+            if(search) {
+                aTemp = aTemp.filter(item=>{
+                    return item.title.toLowerCase().includes(search) ||
+                        item.description.toLowerCase().includes(search)
+                })
+            }
+            if(desc===true) {
+                aTemp = aTemp.sort((a,b)=>{return b.price-a.price})
+            } else {
+                aTemp = aTemp.sort((a,b)=>{return a.price-b.price})
+            }
+            if(campus && campus.length>0) {
+                aTemp = aTemp.filter(item=>{
+                    let user = this.users.filter(u=>u._id==item.idUser)[0]
+                    let bool = false
+                    campus.forEach(c=>{
+                        console.log(campus.length);
+                        if(c==user.campus) 
+                            bool = true;
+                    })
+                    return bool;
+                })
+            }
+            if(subcat) {
+                aTemp = aTemp.filter(item=>{
+                    return item.idCategory==subcat
+                })
+            }
+            return aTemp
+        },
         redirectToAnnounce(id) {
             this.$router.push({path:'/product/'+id})
-        }        
-    }  
+        }
+    },
+    computed: {
+        getAnnounces() {
+            return this.filtredAnnounces(this.search, this.desc, this.campus, this.subcat)
+        }
+    }
+
+    
 }
 </script>

@@ -42,8 +42,15 @@
             <v-tooltip right
               v-for="(item, i) in bottom_items"
               :key="i">
-              <template v-slot:activator="{on, attrs}">
+              <template v-if="item.href!=null" v-slot:activator="{on, attrs}">
                 <v-list-item link :href="item.href">
+                  <v-list-item-icon>
+                        <v-icon v-bind:color="$route.path==item.href?'#158aaf':''" large v-bind="attrs" v-on="on">{{item.icon}}</v-icon>
+                  </v-list-item-icon>
+                </v-list-item>
+              </template>
+              <template v-else v-slot:activator="{on, attrs}">
+                <v-list-item @click="handleLogout()">
                   <v-list-item-icon>
                         <v-icon v-bind:color="$route.path==item.href?'#158aaf':''" large v-bind="attrs" v-on="on">{{item.icon}}</v-icon>
                   </v-list-item-icon>
@@ -79,7 +86,7 @@ export default {
         span: 'À propos de nous'
       },
       {
-        href: '/logout',
+        href: null,
         icon: 'mdi-logout',
         span: 'Déconnexion'
       }
@@ -89,7 +96,11 @@ export default {
     toggle_dark_mode: function () {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
       localStorage.setItem("dark_theme", this.$vuetify.theme.dark.toString())
-    }
+    },
+    handleLogout() {
+      this.$store.dispatch('user/logout')
+      this.$router.push({path:'/'})
+    },
   },
   mounted() {
     const theme = localStorage.getItem("dark_theme");

@@ -8,7 +8,7 @@
         </v-btn>
         <v-list-item class="d-flex justify-center mt-10 ml-5">
             <v-list-item-avatar width=75% height=auto v-if="editMode">
-                <v-img class='shaking' :src="addedImage?addedImage:'https://randomuser.me/api/portraits/men/78.jpg'"></v-img>
+                <v-img class='shaking' :src="displayedImage?displayedImage:'https://pfe-vinci-back-dev.herokuapp.com/user/profil-images/'+getProfilPic"></v-img>
                 <v-file-input 
                     style="position: absolute; color: white;" 
                     class="text--white" 
@@ -19,7 +19,7 @@
                 </v-file-input>
             </v-list-item-avatar>
             <v-list-item-avatar width=75% height=auto v-else>
-                <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+                <v-img :src="'https://pfe-vinci-back-dev.herokuapp.com/user/profil-images/'+getProfilPic"></v-img>
             </v-list-item-avatar>
         </v-list-item>
         <v-list-item>
@@ -27,7 +27,7 @@
                 <v-list-item-title 
                     class="d-flex justify-center"
                 >
-                    <h3 class="pa-3">Julien Van Tongerloo</h3>
+                    <h3 class="pa-3">{{getName+' '+getLastName}}</h3>
                 </v-list-item-title>
             </v-list-item-content>
         </v-list-item>
@@ -42,25 +42,21 @@
         <v-list-item two-line>
             <v-list-item-content>
             <v-list-item-title>EMAIL</v-list-item-title>
-            <v-list-item-subtitle>julien.vantongerloo@student.vinci.be</v-list-item-subtitle>
-            </v-list-item-content>
-        </v-list-item>
-        <v-list-item two-line>
-            <v-list-item-content>
-                <v-list-item-title>TELEPHONE</v-list-item-title>
-                <v-list-item-subtitle>0499/46.73.83</v-list-item-subtitle>
+            <v-list-item-subtitle>{{getEmail}}</v-list-item-subtitle>
             </v-list-item-content>
         </v-list-item>
         <v-list-item two-line>
             <v-list-item-content>
                 <v-list-item-title>CAMPUS</v-list-item-title>
-                <v-list-item-subtitle v-if="!editMode">Woluwe-Saint-Lambert</v-list-item-subtitle>
+                <v-list-item-subtitle v-if="!editMode">{{this.displayedCampus}}</v-list-item-subtitle>
                 <v-list-item-subtitle v-else>
                     <v-select
                     v-model="selectedCampus"
                     :items="this.$store.state.campus"
-                    label="Woluwe-Saint-Lambert"
-                    @change="editCampus()"
+                    :label="this.displayedCampus"
+                    item-text="name"
+                    item-value="id"
+                    @change="editCampus"
                     />
                 </v-list-item-subtitle>
             </v-list-item-content>
@@ -68,30 +64,56 @@
     </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import axios from 'axios';
+import { server } from '../helper';
 export default {
     name: 'Profile',
     data: () => ({
         editMode: false,
         addedImage: null,
         selectedCampus: null,
+        campus: null,
+        displayedImage: null
     }),
+    mounted() {
+        this.campus = this.$store.state.campus
+        this.$root.$on('forceRerender', this.forceRerender)
+    },
     methods: {
         handleClickEdit() {
+            if(this.editMode) {
+                try {
+                    const config = { headers: { 'Content-Type': 'multipart/form-data' } };
+                    let fd = new FormData()
+                    fd.append('file',this.addedImage)
+                    fd.append('userId',localStorage.getItem('userId'));
+                    axios.post("https://pfe-vinci-back-dev.herokuapp.com/upload/profil-images/", fd, config)
+                } catch(e) {
+                    console.log(e);
+                }
+            }
             this.editMode = !this.editMode
             this.$forceUpdate()
         },
         editCampus() {
-            console.log(this.selectedCampus);
-            axios.put(
-                '/profile/campus',
-                this.selectedCampus
-            ).then(data => {
-                console.log(data)
-            });
+            axios.patch(server.baseURLProd+"user/"+localStorage.getItem("userId"), {campus: this.selectedCampus})
         },
         handleAddImage() {
-            this.addedImage = URL.createObjectURL(this.addedImage)
+            this.displayedImage = URL.createObjectURL(this.addedImage)
+        }
+    },
+    computed: {
+        ...mapGetters({
+        getName: 'user/getName',
+        getLastName: 'user/getLastName',
+        getCampus: 'user/getCampus',
+        getEmail: 'user/getEmail',
+        getProfilPic: 'user/getProfilPic'
+        }),
+        displayedCampus() {
+            this.$store.dispatch('user/searchUserByToken')
+            return this.campus.filter(c=>c.id==this.getCampus)[0].name
         }
     }
 }
