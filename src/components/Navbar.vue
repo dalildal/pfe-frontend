@@ -38,7 +38,7 @@
                 overlap
                 class="mt-2"
                 :value="notif"
-                :content="notificationsNotRead()"
+                :content="notif"
               >
                 <v-btn icon v-bind="attrs" v-on="on" @click="notif=0;handleNotifClick()">
                   <v-icon large>mdi-bell-outline</v-icon>
@@ -47,14 +47,14 @@
           </template>
           <v-card>
             <h2 class="pl-5 pt-2">Notifications</h2>
-            <v-list two-line v-for="notification in this.$store.state.notifications" :key="notification.id">
+            <v-list two-line v-for="notification in this.notifications" :key="notification._id">
               <v-list-item>
                 <v-list-item-avatar>
-                  <v-img src="../assets/home.png" />
+                  <v-img :src="notificationRender(notification).img" />
                 </v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title>{{notificationRender(notification.id).title}}</v-list-item-title>
-                  <v-list-item-subtitle>{{notificationRender(notification.id).subtitle}}</v-list-item-subtitle>
+                  <v-list-item-title>{{notificationRender(notification).title}}</v-list-item-title>
+                  <v-list-item-subtitle>{{notificationRender(notification).subtitle}}</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
               <v-divider class="mx-5"/>
@@ -98,8 +98,10 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { mapGetters } from 'vuex'
 import Profile from './Profile.vue'
+import { server } from '../helper'
 export default {
   name : 'Navbar',
   components: {
@@ -112,28 +114,30 @@ export default {
       search: undefined,
       loading: undefined,
       announces: [],
-      notif: [],
+      notif: null,
+      notifications: null,
     }
   },
   mounted () {
     this.$store.state.announces.then(response => this.announces=response.data)
     this.isLoggedIn?this.$store.dispatch('user/searchUserByToken'):null
+    this.notif = this.notificationsNotRead()
+    this.$store.state.notifications.then(response=>this.notifications=response.data)
   },
   methods: {
-    notificationRender(i) {
-      let notification = this.$store.state.notifications.filter(n=>n.id==i)[0];
-      let announce = this.announces.filter(c=>c.id==notification.id_announce)[0]
-      return { 
-        src: "../assets/home.png",
-        title: notification.state=='sold'?'Article vendu':notification.state=='buy'?'Article acheté':'Article supprimé', 
-        subtitle: announce.title + (notification.state=='sold'?' vendu à ':notification.state=='buy'?' acheté par ':' a été retiré de la vente')+(notification.to_user?notification.to_user:'')
+    notificationRender(notification) {
+      let announce = this.announces.filter(a=>a.id==notification.idProduct)[0]
+      return {
+          title: announce.title,
+          subtitle: "Votre "+announce.title+" est "+announce.state,
+          img: 'https://pfe-vinci-back-dev.herokuapp.com/products/product-images/'+announce.liste[0]
       }
     },
     notificationsNotRead() {
-      return this.$store.state.notifications.filter(n=>n.read==false).length;
+      this.$store.state.notifications.then(response=>this.notif = response.data.filter(n=>n.state===false).length);
     },
     handleNotifClick() {
-      this.$store.state.notifications.forEach(n=>n.read=true)
+      axios.patch(server.baseURLProd+"notifications/"+localStorage.getItem("userId"))
     },
     handleSearchSubmit() {
       if(this.$route.path!="/announces")
@@ -151,8 +155,9 @@ export default {
   computed: {
     ...mapGetters({
       getName: 'user/getName',
-      isLoggedIn: 'user/isLoggedIn'
-    })
+      isLoggedIn: 'user/isLoggedIn',
+      getUser: 'user/searchUserByToken'
+    }),
   }
 }
 </script>

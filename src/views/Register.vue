@@ -13,36 +13,44 @@
                     <p class="pt-2 font-weight-thin">Déjà un compte ? <a color=#158aaf href="/login">Se connecter</a></p>
                     <h1 class="pt-14 mb-5">Bienvenue chez Vinci Market</h1>
                     <p class="mb-10 font-weight-thin">Projet dans une démarche de développement durable visant à promouvoir le réemploi.</p>
-                    <v-form @submit.prevent="handleRegister" method="post">
+                    <v-form @submit.prevent="handleRegister" method="post" v-model="valid">
                         <v-text-field
                             v-model="user.lastname"
                             label="Nom"
                             outlined
                             append-icon="mdi-account-outline"
+                            :rules="rules"
                         />
                         <v-text-field
                             v-model="user.name"
                             label="Prenom"
                             outlined
                             append-icon="mdi-account-outline"
+                            :rules="rules"
                         />
-                        <v-text-field
+                        <v-select
                             v-model="user.campus"
-                            label="Campus"
+                            :items="this.$store.state.campus"
+                            :label="this.displayedCampus"
+                            item-text="name"
+                            item-value="id"
                             outlined
-                            append-icon="mdi-account-outline"
-                        />
+                            :rules="campusrules"
+                            />
                         <v-text-field
                             v-model="user.email"
                             label="Email vinci"
                             outlined
-                            append-icon="mdi-account-outline"
+                            append-icon="mdi-email-outline"
+                            :rules="emailrules"
                         />
                         <v-text-field
                             v-model="user.password"
                             label="Mot de passe"
                             outlined
                             append-icon="mdi-lock-outline"
+                            :rules="rules"
+                            type="password"
                         />
                         
                         <v-btn
@@ -51,6 +59,7 @@
                             elevation="0"
                             color=#158aaf
                             type="submit"
+                            :disabled="!valid"
                         >
                             S'inscrire
                         </v-btn>
@@ -77,7 +86,17 @@ import { server } from '../helper';
 
         data() {
             return {
-                user : new User('','',0,'','')
+                user : new User('','',0,'',''),
+                rules: [
+                    value=>!!value||'Champs obligatoire'
+                ],
+                emailrules: [
+                    value=>(value && value.endsWith("vinci.be"))||'Doit se finir par "vinci.be"'
+                ],
+                campusrules: [
+                    value=>(value>=0&&value<3)||'Champs obligatoire'
+                ],
+                valid: true
             }
         },
 
