@@ -60,7 +60,6 @@ export default {
 
         updateProduct({commit} ,payload) {
             commit('SET_PRODUCT',payload)
-            console.log(payload)
             payload.state = 'A vendre'
             axios.patch('http://localhost:3000/products/' + payload._id, payload)
             .then( ()  => {

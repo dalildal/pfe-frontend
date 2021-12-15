@@ -24,14 +24,19 @@
         <v-expansion-panel v-for="user in users" :key="user._id">
           <v-expansion-panel-header
             >{{ user.name }}
-            <div>
+            <div v-if="user.isActive">
               <v-chip width="10px" class="ma-2" color="green" outlined>
                 Utilisateur vérifié
               </v-chip>
             </div>
+            <div v-else>
+              <v-chip width="10px" class="ma-2" color="red" outlined>
+                Utilisateur banni
+              </v-chip>
+            </div>
             </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <v-btn class="ma-2" color="red" dark>
+            <v-btn class="ma-2" color="red" dark @click="updateUser(user)">
               Bannir
               <v-icon dark right> mdi-cancel </v-icon>
             </v-btn>
@@ -90,7 +95,8 @@ export default {
     },
 
     ...mapActions({
-      updateProduct : 'product/updateProduct'
+      updateProduct : 'product/updateProduct',
+      updateUser: 'user/updateUser'
     })
   },
 
