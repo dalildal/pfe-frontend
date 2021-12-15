@@ -73,28 +73,27 @@ export default {
         editMode: false,
         addedImage: null,
         selectedCampus: null,
-        campus: null,
         displayedImage: null
     }),
     mounted() {
-        this.campus = this.$store.state.campus
-        this.$root.$on('forceRerender', this.forceRerender)
+        this.$store.dispatch('user/searchUserByToken')
     },
     methods: {
         handleClickEdit() {
             if(this.editMode) {
-                try {
-                    const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-                    let fd = new FormData()
-                    fd.append('file',this.addedImage)
-                    fd.append('userId',localStorage.getItem('userId'));
-                    axios.post("https://pfe-vinci-back-dev.herokuapp.com/upload/profil-images/", fd, config)
-                } catch(e) {
-                    console.log(e);
+                if(this.addedImage!=null) {
+                    try {
+                        const config = { headers: { 'Content-Type': 'multipart/form-data' } };
+                        let fd = new FormData()
+                        fd.append('file',this.addedImage)
+                        fd.append('userId',localStorage.getItem('userId'));
+                        axios.post("https://pfe-vinci-back-dev.herokuapp.com/upload/profil-images/", fd, config)
+                    } catch(e) {
+                        console.log(e);
+                    }   
                 }
             }
             this.editMode = !this.editMode
-            this.$forceUpdate()
         },
         editCampus() {
             axios.patch(server.baseURLProd+"user/"+localStorage.getItem("userId"), {campus: this.selectedCampus})
@@ -109,11 +108,12 @@ export default {
         getLastName: 'user/getLastName',
         getCampus: 'user/getCampus',
         getEmail: 'user/getEmail',
-        getProfilPic: 'user/getProfilPic'
+        getProfilPic: 'user/getProfilPic',
+        getUser: 'user/searchUserByToken',
         }),
         displayedCampus() {
             this.$store.dispatch('user/searchUserByToken')
-            return this.campus.filter(c=>c.id==this.getCampus)[0].name
+            return this.$store.state.campus.filter(c=>c.id==this.getCampus)[0].name
         }
     }
 }

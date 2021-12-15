@@ -63,26 +63,24 @@
         </v-menu>
         <v-tooltip bottom>
           <template v-slot:activator="{on, attrs}">
-            <v-sheet>
-              <div>
-                <v-btn plain height=100% @click.stop="drawer = !drawer" v-bind="attrs" v-on="on">
-                  <v-avatar>
-                    <img :src="'https://pfe-vinci-back-dev.herokuapp.com/user/profil-images/'+getProfilPic"/>
-                  </v-avatar>
-                  <span class="mx-2">{{getName}}</span>
-                  <v-icon>fas fa-caret-down</v-icon>
-                </v-btn>
-              </div>
-              <v-navigation-drawer
-                v-model="drawer"
-                absolute
-                temporary
-                right
-                width=300
-              >
-                <profile />
-              </v-navigation-drawer>
-            </v-sheet>
+            <div>
+              <v-btn class="mt-2" plain @click.stop="drawer = !drawer" v-bind="attrs" v-on="on">
+                <v-avatar>
+                  <img :src="'https://pfe-vinci-back-dev.herokuapp.com/user/profil-images/'+getProfilPic"/>
+                </v-avatar>
+                <span class="mx-2">{{getName}}</span>
+                <v-icon>fas fa-caret-down</v-icon>
+              </v-btn>
+            </div>
+            <v-navigation-drawer
+              v-model="drawer"
+              absolute
+              temporary
+              right
+              width=300
+            >
+              <profile />
+            </v-navigation-drawer>
           </template>
           <span>Profile</span>
         </v-tooltip>
@@ -92,7 +90,7 @@
             <v-icon>
               mdi-account-outline
             </v-icon>
-            Se connecter
+            <div class="hidden-sm-and-down">Se connecter</div>
           </v-btn>
         </template>
       </v-layout>

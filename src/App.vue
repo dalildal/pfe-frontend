@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <v-app id="inspire">
-      <!-- Hardcodé en attendant -->
       <sidebar/>
       <v-main>
         <v-container fluid>

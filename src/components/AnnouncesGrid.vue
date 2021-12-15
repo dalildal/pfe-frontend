@@ -61,7 +61,6 @@ export default {
     methods: {
         getUserAnnounce(id) {
             let user = this.users.filter(u=>u._id==id)[0]
-            console.log(user.url_profil_pic);
             return {
                 fullname: user.name+" "+user.lastname,
                 pp: user.url_profil_pic
