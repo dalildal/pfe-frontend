@@ -52,7 +52,7 @@
                       <v-btn rounded elevation="0" color=#158aaf href="/announces">Voir tout</v-btn>
                     </v-col>
                   </v-row>
-                  <announces-grid />
+                  <announces-grid :desc="true"/>
                 </v-card>
               </v-col>
             </v-row>

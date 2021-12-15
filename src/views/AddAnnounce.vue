@@ -17,7 +17,7 @@
                                     md="8" sm="12"
                                 >
                                     <v-text-field
-                                        v-model="announce.title"
+                                        v-model="title"
                                         label="Titre"
                                         outlined
                                         :rules="rules"
@@ -32,7 +32,7 @@
                                     md="8" sm="12"
                                 >
                                     <v-textarea
-                                        v-model="announce.description"
+                                        v-model="description"
                                         label="Description"
                                         outlined
                                         :rules="rules"
@@ -63,7 +63,7 @@
                                     md="8" sm="12"
                                 >
                                     <v-text-field
-                                        v-model="announce.price"
+                                        v-model="price"
                                         label="Prix"
                                         outlined
                                         :rules="rules"
@@ -98,7 +98,7 @@
                                 >
                                     <v-select
                                         v-model='selectedSubCategory'
-                                        :items="this.subcategories.filter(s=>s.id_categorie==selectedCategory)"
+                                        :items="this.subcategories.filter(s=>s.idCategory==selectedCategory)"
                                         item-text="name"
                                         item-value="id"
                                         label="Sous-catégorie"
@@ -134,6 +134,7 @@
                         <v-dialog
                             v-model="dialog"
                             width="500"
+                            persistent
                         >
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn
@@ -183,7 +184,6 @@
 import axios from 'axios'
 import { mapGetters } from 'vuex'
 import Navbar from '../components/Navbar.vue'
-import Announce from '../store/product.module'
 import { server } from '../helper'
 export default {
     name: 'AddAnnounce',
@@ -203,13 +203,15 @@ export default {
             value=>!!value||'Champs obligatoire'
         ],
         valid: true,
-        announce: new Announce('',localStorage.getItem('userId'),'En attente','','','','','')
+        title: null,
+        description: null,
+        price: null,
       }
     },
     mounted () {
         if(!this.isLoggedIn) this.$router.push("/")
-        this.$store.state.categories.then(response=>(this.categories=response.data))
-        this.$store.state.subcategories.then(response=>(this.subcategories=response.data))
+        this.$store.state.categories.then(response=>{this.categories=response.data})
+        this.$store.state.subcategories.then(response=>{this.subcategories=response.data})
     },
     methods: {
         handleAddImage() {
@@ -218,24 +220,26 @@ export default {
             )
         },
         validate() {
+            console.log(this.$store.state.campus.filter(c=>c.id==this.getCampus)[0]);
             this.$refs.form.validate()
             axios.post(server.baseURLProd+"products", {
                 idUser: localStorage.getItem('userId'),
                 state: "En attente",
-                title: this.announce.title,
-                description: this.announce.description,
-                price: this.announce.price,
-                idCategory: this.announce.category,
-                address: this.getUser.campus
+                title: this.title,
+                description: this.description,
+                price: this.price?this.price:0,
+                idCategory: this.selectedSubCategory,
+                address: this.$store.state.campus.filter(c=>c.id==this.getCampus)[0].name
             }, {headers: {}})
                 .then(response=>{
-                    let id = response.data
+                    let id = response.data.id
+                    console.log(this.addedImage);
                     const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-                    this.images.forEach(i=>{
+                    this.addedImage.forEach(i=>{
                         let fd = new FormData()
                         fd.append('file',i)
                         fd.append('userId',id);
-                        axios.post(server.baseURLProd+"upload/product-images", fd, config)
+                        axios.post(server.baseURLProd+"upload/product-images", fd, config).catch(e=>console.log(e.stack))
                     })
                 })
         }
@@ -244,7 +248,7 @@ export default {
     computed: {
         ...mapGetters({
             isLoggedIn: 'user/isLoggedIn',
-            getUser: 'user/searchUserByToken'
+            getCampus: 'user/getCampus'
        }),        
     }
 }

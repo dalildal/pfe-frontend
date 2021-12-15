@@ -122,14 +122,14 @@ export default {
     this.$store.state.announces.then(response => this.announces=response.data)
     this.isLoggedIn?this.$store.dispatch('user/searchUserByToken'):null
     this.notif = this.notificationsNotRead()
-    this.$store.state.notifications.then(response=>this.notifications=response.data)
+    this.$store.state.notifications.then(response=>this.notifications=response.data.reverse())
   },
   methods: {
     notificationRender(notification) {
       let announce = this.announces.filter(a=>a.id==notification.idProduct)[0]
       return {
-          title: announce.title,
-          subtitle: "Votre "+announce.title+" est "+announce.state,
+          title: notification.title+" - "+announce.title,
+          subtitle: notification.description,
           img: 'https://pfe-vinci-back-dev.herokuapp.com/products/product-images/'+announce.liste[0]
       }
     },
