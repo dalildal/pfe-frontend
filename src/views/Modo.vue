@@ -24,14 +24,19 @@
         <v-expansion-panel v-for="user in users" :key="user._id">
           <v-expansion-panel-header
             >{{ user.name }}
-            <div>
+            <div v-if="user.isActive">
               <v-chip width="10px" class="ma-2" color="green" outlined>
                 Utilisateur vérifié
               </v-chip>
             </div>
+            <div v-else>
+              <v-chip width="10px" class="ma-2" color="red" outlined>
+                Utilisateur banni
+              </v-chip>
+            </div>
             </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <v-btn class="ma-2" color="red" dark>
+            <v-btn class="ma-2" color="red" dark @click="updateUser(user)">
               Bannir
               <v-icon dark right> mdi-cancel </v-icon>
             </v-btn>
@@ -39,24 +44,26 @@
         </v-expansion-panel>
       </v-expansion-panels>
       <v-expansion-panels popout v-else>
-        <v-expansion-panel v-for="product in products" :key="product.id_announce">
+        <v-expansion-panel v-for="(product, index) in products" :key="product.id_announce">
           <v-expansion-panel-header
             > {{product.title}}
             <div>
-              <v-chip width="10px" class="ma-2" color="green" outlined>
-               annonces en attentes
+              <v-chip width="10px" class="ma-2" color="red" outlined>
+               annonce en attente
               </v-chip>
             </div>
             </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <v-container>
-                <p>prix : {{ product.price }}</p>
-                <p>descrition : {{ product.description }}</p>
-              </v-container>
+            <v-card class="d-flex flex-row">
+                <v-card-text>Posté par : {{users[index].name}} </v-card-text>
+                <v-card-text>prix : {{ product.price }}</v-card-text>
+                <!-- <v-card-text>descrition : {{ product.description }}</v-card-text> -->
+                <v-card-text>adresse : {{ product.address }}</v-card-text> 
             <v-btn class="ma-2" color="green" dark @click="updateProduct(product)">
               Confirmé l'annonces
               <v-icon dark right> mdi-checkbox-marked-circle </v-icon>
             </v-btn>
+            </v-card>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -74,7 +81,8 @@ export default {
 
   data() {
     return {
-      userIsActive : false
+      userIsActive : false,
+      usersByProduct: []
     }
   },
 
@@ -87,13 +95,21 @@ export default {
     },
 
     ...mapActions({
-      updateProduct : 'product/updateProduct'
+      updateProduct : 'product/updateProduct',
+      updateUser: 'user/updateUser'
     })
   },
 
   mounted() {
     this.$store.dispatch("user/getUsers");
-    this.$store.dispatch("product/getProductsOnHold");
+    this.$store.dispatch("product/getProductsOnHold")
+    .then(response => {
+      const productsHold = response.data;
+      for(let i = 0 ; i < productsHold.length; i++ ) {
+        const user = this.$store.dispatch('user/searchUserById', productsHold[i].idUser)
+        this.users.push(user)
+      }
+    });
   },
 
   computed: {

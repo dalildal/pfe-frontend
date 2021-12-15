@@ -10,6 +10,7 @@ export default {
         campus: null,
         email: null,
         token: localStorage.getItem('token'),
+        is_active: null,
         url_profil_pic: null,
         userProduct : [],
         users: []
@@ -44,11 +45,18 @@ export default {
             axios.get(server.baseURLProd+'user/' + idUserProduct)
             .then(response => {
                 commit('SET_USERPRODUCT', response.data)
-                console.log(response.data)
+                
             })
             .catch(error => {
                 console.log(error);
             })
+        },
+
+        updateUser({commit} ,payload) {
+            commit('SET_USER',payload)
+            console.log(payload)
+            payload.is_active = true
+            axios.put('http://localhost:3000/user/' + payload._id, payload)
         }
     },
     mutations: {
@@ -89,6 +97,7 @@ export default {
             state.lastname = user.lastname
             state.campus = user.campus
             state.email = user.email
+            state.is_active = user.is_active
             state.url_profil_pic = user.url_profil_pic
         }
     },
