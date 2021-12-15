@@ -10,6 +10,7 @@ export default {
         description: null,
         price: null,
         address: null,
+        category: null,
         products: []
     },
 
@@ -111,6 +112,9 @@ export default {
         },
         getAdress(state) {
             return state.address
+        }, 
+        getCategory(state) {
+            return state.category
         }
     }
 

@@ -85,7 +85,8 @@ const PAGE_TITLE = {
   "Modo": "VinciMarket | Page modérateur",
   "Add": "VinciMarket | Ajouter une annonce",
   "About": "VinciMarket | À propos de nous`",
-  "Error": "VinciMarket | Error"
+  "Error": "VinciMarket | Error",
+  "AddAnnounce": "VinciMarket | Ajouter une annonce"
 }
 
 router.afterEach((toRoute, fromRoute) => {
