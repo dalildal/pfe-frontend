@@ -66,7 +66,9 @@
             <v-sheet>
               <div>
                 <v-btn plain height=100% @click.stop="drawer = !drawer" v-bind="attrs" v-on="on">
-                  <v-avatar color=#158aaf></v-avatar>
+                  <v-avatar>
+                    <img :src="'https://pfe-vinci-back-dev.herokuapp.com/user/profil-images/'+getProfilPic"/>
+                  </v-avatar>
                   <span class="mx-2">{{getName}}</span>
                   <v-icon>fas fa-caret-down</v-icon>
                 </v-btn>
@@ -156,7 +158,8 @@ export default {
     ...mapGetters({
       getName: 'user/getName',
       isLoggedIn: 'user/isLoggedIn',
-      getUser: 'user/searchUserByToken'
+      getUser: 'user/searchUserByToken',
+      getProfilPic: 'user/getProfilPic'
     }),
   }
 }
