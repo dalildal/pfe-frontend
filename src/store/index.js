@@ -13,6 +13,10 @@ export default new Vuex.Store({
       server.baseURLProd+'products',
       {headers: {}}
     ),
+    myannounces: axios.get(
+      server.baseURLProd+'products/productsUser/'+localStorage.getItem('userId'),
+      {headers: {}}
+    ),
     users: axios.get(server.baseURLProd+'user',
       {headers: {}}
     ),
