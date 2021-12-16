@@ -1,10 +1,9 @@
-<template>
-  <!-- <div v-if="isLoggedIn"> -->
+<template :key="isLoggedIn">
   <div>
     <navbar />
     <v-container fluid>
       <v-row>
-        <v-col md="8" lg="9">
+        <v-col v-bind:md="isLoggedIn?8:12" v-bind:lg="isLoggedIn?9:12">
           <v-container fluid>
             <v-row dense>
               <v-col cols="12">
@@ -60,8 +59,8 @@
             </v-row>
           </v-container>
         </v-col>
-        <v-col class="hidden-sm-and-down" md="4" lg="3">
-          <v-container fluid style="position: sticky; top: 10vh">
+        <v-col class="hidden-sm-and-down" md="4" lg="3" v-if="isLoggedIn">
+          <v-container fluid style="position: sticky; top: 10vh" :key="isLoggedIn">
             <v-row dense>
               <v-col>
                 <v-card max-width="400" class="mx-auto">
@@ -76,7 +75,7 @@
                     item-height="64"
                   >
                     <template v-slot:default="{ item }">
-                      <v-list-item two-line :key="item.id">
+                      <v-list-item two-line>
                         <v-list-item-avatar tile>
                           <v-img tile :src="'https://pfe-vinci-back-dev.herokuapp.com/products/product-images/'+item.liste[0]" />
                         </v-list-item-avatar>
@@ -88,6 +87,9 @@
                             {{ item.state }}
                           </v-list-item-subtitle>
                         </v-list-item-content>
+                        <v-list-item-icon>
+                          <v-icon @click="redirectToAnnounce(item._id)">mdi-link</v-icon>
+                        </v-list-item-icon>
                       </v-list-item>
 
                       <v-divider></v-divider>
@@ -154,18 +156,23 @@ export default {
   mounted () {
     this.$store.state.announces.then(response => (this.announces = response.data))
     this.$store.state.users.then(response => (this.users = response.data))
-    this.$store.state.myannounces.then(response=>(this.myannounces=response.data))
+    this.$store.dispatch('user/searchUserByToken')
+    this.$store.dispatch('user/isLoggedIn')
+    this.$store.state.myannounces.then(response=>{console.log(response.data);this.myannounces=response.data})
   },
   methods: {
     getUserAnnounce(id) {
       let user = this.users.filter(u=>u._id==id)[0]
       return user.name+" "+user.lastname
+    },
+    redirectToAnnounce(id) {
+        this.$router.push({path:'/product/'+id})
     }
   },
   computed: {
     ...mapGetters({
       isLoggedIn: 'user/isLoggedIn',
-    }),
+    })
   },
 };
 </script>
