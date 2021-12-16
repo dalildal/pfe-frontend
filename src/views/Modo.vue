@@ -37,6 +37,11 @@
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-card class="d-flex flex-row">
+              <v-card-text class="d-flex justify-center align-center">
+                <v-avatar>
+                <v-img :src="'https://pfe-vinci-back-dev.herokuapp.com/user/profil-images/'+user.url_profil_pic"></v-img>
+                </v-avatar>
+              </v-card-text>
               <v-card-text>Nom : {{user.name + user.lastname}} </v-card-text>
               <v-card-text>email : {{user.email}}</v-card-text>
               <v-card-text>campus : {{user.campus}}</v-card-text>
@@ -78,8 +83,17 @@
             </div>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
+            <v-row>
+              <v-col sm="12" md="3">
+                <v-img class="rounded-lg" :src="'https://pfe-vinci-back-dev.herokuapp.com/products/product-images/'+product.liste[0]"></v-img>
+              </v-col>
+              <v-col sm="12" md="9" align-self="center">
+                <p>{{product.description}}</p>
+              </v-col>
+            </v-row>
+            <v-row>
             <v-card class="d-flex flex-row">
-              <v-card-text>Posté par : {{ users[index].name }} </v-card-text>
+              <v-card-text>Posté par : {{ users[index].name+" "+users[index].lastname }} </v-card-text>
               <v-card-text>prix : {{ product.price }}</v-card-text>
               <!-- <v-card-text>descrition : {{ product.description }}</v-card-text> -->
               <v-card-text>adresse : {{ product.address }}</v-card-text>
@@ -93,6 +107,7 @@
                 <v-icon dark right> mdi-checkbox-marked-circle </v-icon>
               </v-btn>
             </v-card>
+            </v-row>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
