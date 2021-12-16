@@ -103,7 +103,7 @@
                 dark
                 @click="updateProduct(product)"
               >
-                Confirmé l'annonces
+                Confirmer l'annonce
                 <v-icon dark right> mdi-checkbox-marked-circle </v-icon>
               </v-btn>
             </v-card>
