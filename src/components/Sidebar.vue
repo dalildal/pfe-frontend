@@ -17,7 +17,7 @@
             <v-tooltip right
               v-for="(item, i) in top_items"
               :key="i">
-              <template v-slot:activator="{on, attrs}">
+              <template v-slot:activator="{on, attrs}" v-if="isAdmin">
                 <v-list-item link :href="item.href">
                   <v-list-item-icon>
                         <v-icon v-bind:color="$route.path==item.href?'#158aaf':''" large v-bind="attrs" v-on="on">{{item.icon}}</v-icon>
@@ -78,6 +78,11 @@ export default {
         href: '/my-announces',
         icon: 'mdi-storefront-outline',
         span: 'Mes annonces'
+      },
+      {
+        href: '/modo',
+        icon: 'mdi-account-tie',
+        span: 'Modération'
       }
     ],
     bottom_items: [
@@ -112,7 +117,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isLoggedIn: 'user/isLoggedIn'
+      isLoggedIn: 'user/isLoggedIn',
+      isAdmin : 'user/isAdmin'
     }),      
   }
 }
