@@ -107,6 +107,21 @@
                                     ></v-select>
                                 </v-col>
                             </v-row>
+                            <v-row class="mx-10">
+                                <v-col md="4" class="hidden-sm-and-down">
+                                    <p>Adresse de l'annonce</p>
+                                </v-col>
+                                <v-col
+                                    md="8" sm="12"
+                                >
+                                    <v-text-field
+                                        v-model="address"
+                                        label="Adresse"
+                                        outlined
+                                        :rules="rulesAddress"
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
                         </v-col>
                         <v-col md="6" sm="12" align-self="center" class="px-16">
                             <template v-if="images.length>0">
@@ -197,10 +212,14 @@ export default {
         selectedSubCategory: null,
         categories: null,
         subcategories: null,
+        address: null,
         addedImage: undefined,
         images: [],
         rules: [
             value=>!!value||'Champs obligatoire'
+        ],
+        rulesAddress: [
+            value=>(!!value && new RegExp('.+ [0-9]+ [0-9]+ .+').test(value))||'Doit respecter : \'rue\' \'numero\' \'code postal\' \'ville\''
         ],
         valid: true,
         title: null,
@@ -229,7 +248,7 @@ export default {
                 description: this.description,
                 price: this.price?this.price:0,
                 idCategory: this.selectedSubCategory,
-                address: this.$store.state.campus.filter(c=>c.id==this.getCampus)[0].name
+                address: this.address
             }, {headers: {}})
                 .then(response=>{
                     let id = response.data.id

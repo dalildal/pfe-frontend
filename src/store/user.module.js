@@ -14,12 +14,13 @@ export default {
         is_admin : null,
         url_profil_pic: null,
         userProduct : [],
-        users: []
+        users: [],
+        userUpdate: null
     },
 
     actions: {
         getUsers({commit}) {
-            axios.get('http://localhost:3000/user')
+            axios.get(server.baseURLProd+'user')
             .then(response => {
                 console.log(response.data);
                 commit('SET_USERS', response.data)
@@ -40,7 +41,6 @@ export default {
             { headers: {
                 'Authorization': `Bearer ${this.state.user.token}`
             }})
-            console.log(response.data);
             commit('SET_USER', response.data)
         },
 
@@ -55,9 +55,8 @@ export default {
         },
 
         updateUser({commit} ,payload) {
-            commit('SET_USER',payload)
-            console.log(payload)
-            axios.patch('http://localhost:3000/user/' + payload._id + "/isactive")
+            commit('SET_USER_TO',payload)
+            axios.patch(server.baseURLProd+'user/' + payload._id + "/isactive")
             .then(() => {
                 this.state.users;
             })
@@ -66,6 +65,10 @@ export default {
     mutations: {
         SET_USERS(state, users) {
             state.users = users
+        },
+
+        SET_USER_TO(state, user) {
+            state.userUpdate = user._id
         },
 
         SET_USERPRODUCT(state, userProduct) {

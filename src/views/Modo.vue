@@ -39,7 +39,7 @@
             <v-card class="d-flex flex-row">
               <v-card-text>Nom : {{user.name + user.lastname}} </v-card-text>
               <v-card-text>email : {{user.email}}</v-card-text>
-              <v-card-text>capus : {{user.campus}}</v-card-text>
+              <v-card-text>campus : {{user.campus}}</v-card-text>
               <v-btn
                 v-if="user.is_active"
                 class="ma-2"

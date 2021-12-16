@@ -1,4 +1,5 @@
 import axios from "axios";
+import {server} from '../helper'
 
 export default {
     namespaced: true,
@@ -11,12 +12,13 @@ export default {
         price: null,
         address: null,
         category: null,
-        products: []
+        products: [],
+        liste: [],
     },
 
     actions: {
         getProducts({ commit }) {
-            axios.get('http://localhost:3000/products',
+            axios.get(server.baseURLProd+'products',
                 {
                     headers: {}
                 }).then(response => {
@@ -30,7 +32,7 @@ export default {
 
         getProductsOnHold({commit}) {
             return new Promise((resolve,reject) => {
-                axios.get('http://localhost:3000/products/onHold',
+                axios.get(server.baseURLProd+'products/onHold',
                 {
                     headers: {}
                 }).then(response => {
@@ -47,7 +49,7 @@ export default {
 
         getProduct({ commit }, product) {
             return new Promise((resolve, reject) => {
-                axios.get('http://localhost:3000/products/' + product)
+                axios.get(server.baseURLProd+'products/' + product)
                     .then(response => {
                         commit('SET_PRODUCT', response.data)
                         console.log(response.data);
@@ -63,7 +65,7 @@ export default {
         updateProduct({commit} ,payload) {
             commit('SET_PRODUCT',payload)
             payload.state = 'A vendre'
-            axios.patch('http://localhost:3000/products/' + payload._id, payload)
+            axios.patch(server.baseURLProd+'products/' + payload._id, payload)
             .then( ()  => {
                 commit('REMOVE_PRODUCT', payload._id)
             })
@@ -84,6 +86,7 @@ export default {
             state.description = product.description
             state.price = product.price
             state.address = product.address
+            state.liste = product.liste
         },
 
         REMOVE_PRODUCT(state, id) {
@@ -115,6 +118,9 @@ export default {
         }, 
         getCategory(state) {
             return state.category
+        },
+        getListe(state) {
+            return state.liste
         }
     }
 
