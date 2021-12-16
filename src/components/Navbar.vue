@@ -141,10 +141,10 @@ export default {
     },
     handleSearchSubmit() {
       if(this.$route.path!="/announces")
-        this.$router.push({path: "/announces", query: {search: this.search, desc: this.$parent.$children[2].$props.desc}})
+        this.$router.push({path: "/announces", query: {search: this.search.toLowerCase(), desc: this.$parent.$children[2].$props.desc}})
       else
         this.$router.replace({ query: {
-          search: this.search, 
+          search: this.search.toLowerCase(), 
           desc: this.$parent.$children[2].$props.desc,
           campus: this.$parent.$children[2].$props.campus
         } })
