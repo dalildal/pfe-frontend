@@ -31,7 +31,7 @@
               <template v-if="isAdmin" v-slot:activator="{on, attrs}">
                 <v-list-item link :href="top_items[2].href">
                   <v-list-item-icon>
-                        <v-icon large v-bind="attrs" v-on="on">{{top_items[2].icon}}</v-icon>
+                        <v-icon large v-bind:color="$route.path==top_items[2].href?'#158aaf':''" v-bind="attrs" v-on="on">{{top_items[2].icon}}</v-icon>
                   </v-list-item-icon>
                 </v-list-item>
               </template>

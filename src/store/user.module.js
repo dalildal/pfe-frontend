@@ -114,7 +114,9 @@ export default {
         isLoggedIn(state) {
             return !!state.token
         },
-
+        getId(state) {
+            return state.userId
+        },
         getLastName(state) {
             return state.lastname
         },
