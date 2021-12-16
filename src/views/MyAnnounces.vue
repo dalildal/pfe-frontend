@@ -32,7 +32,7 @@
                             color="primary"
                         ></v-progress-circular>
                     </div>
-                    <div v-else-if="item.state==='Annulé'">
+                    <div v-else-if="item.state==='Supprimer'">
                         Annulé
                         <v-icon 
                             color="red"
@@ -41,7 +41,7 @@
                             mdi-cancel
                         </v-icon>
                     </div>
-                    <div v-else-if="item.state==='Cloturer'">
+                    <div v-else-if="item.state==='Vendu'">
                         Vente clôturée
                         <v-icon 
                             class="ml-5"

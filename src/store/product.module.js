@@ -4,7 +4,7 @@ import {server} from '../helper'
 export default {
     namespaced: true,
     state: {
-        idProduct: null,
+        id: null,
         idUser: null,
         state: null,
         title: null,
@@ -62,14 +62,31 @@ export default {
             })
         },
 
-        updateProduct({commit} ,payload) {
+        acceptProduct({commit} ,payload) {
             commit('SET_PRODUCT',payload)
             payload.state = 'A vendre'
             axios.patch(server.baseURLProd+'products/' + payload._id, payload)
             .then( ()  => {
                 commit('REMOVE_PRODUCT', payload._id)
             })
-        }
+        },
+        removeProduct({commit} ,payload) {
+            commit('SET_PRODUCT',payload)
+            payload.state = 'Supprimer'
+            axios.patch(server.baseURLProd+'products/' + payload._id, payload)
+            .then( ()  => {
+                commit('REMOVE_PRODUCT', payload._id)
+            })
+        },
+        clotureProduct({commit} ,payload) {
+            console.log(payload);
+            commit('SET_PRODUCT',payload)
+            payload.state = 'Vendu'
+            axios.patch(server.baseURLProd+'products/' + payload.id, payload)
+            .then( ()  => {
+                commit('REMOVE_PRODUCT', payload._id)
+            })
+        },
     },
 
     mutations: {
@@ -79,7 +96,7 @@ export default {
         
 
         SET_PRODUCT(state, product) {
-            state.idProduct = product.idProduct
+            state.id = product.id
             state.idUser = product.idUser
             state.state = product.state
             state.title = product.title
@@ -98,8 +115,8 @@ export default {
     },
 
     getters: {
-        getidProduct(state) {
-            return state.idProduct
+        getid(state) {
+            return state.id
         },
         getState(state) {
             return state.state

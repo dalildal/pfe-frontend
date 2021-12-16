@@ -99,6 +99,7 @@
               transition="dialog-bottom-transition"
               max-width="600"
               height="200"
+              v-if="userProduct._id!=getUserId"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
@@ -129,6 +130,16 @@
                 </v-card>
               </template>
             </v-dialog>
+            <v-btn
+              v-else
+              color="primary"
+              v-bind="attrs"
+              v-on="on"
+              width="100%"
+              style="background-image: linear-gradient(to top left, #0c607a, #21bfe5);"
+              @click="clotureProduct(product)"  
+            >Clôturer l'annonce
+            </v-btn>
           </v-container>
         </v-col>
       </v-row>
@@ -137,7 +148,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import axios from "axios";
 import Navbar from "../components/Navbar.vue"
 
@@ -170,6 +181,7 @@ export default {
         this.currentPlace = product.address;
         this.getAddress();
       });
+      console.log(this.product);
   },
 
   methods: {
@@ -199,6 +211,9 @@ export default {
       );
       this.addMarker(address.data.results[0]);
     },
+    ...mapActions({
+      clotureProduct: 'product/clotureProduct'
+    })
   },
   computed: {
     ...mapGetters({
@@ -206,7 +221,8 @@ export default {
       getTitle: "product/getTitle",
       getDescription: "product/getDescription",
       getPrice: "product/getPrice",
-      getListe: "product/getListe"
+      getListe: "product/getListe",
+      getUserId: "user/getId"
     }),
 
     ...mapState({
