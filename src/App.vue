@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" style="overflow-x: hidden">
     <v-app id="inspire">
       <sidebar/>
       <v-main>
