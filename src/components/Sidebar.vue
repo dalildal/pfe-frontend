@@ -39,24 +39,25 @@
               </template>
               <span>Thème</span>
             </v-tooltip>
-            <v-tooltip right
-              v-for="(item, i) in bottom_items"
-              :key="i">
-              <template v-if="item.href!=null" v-slot:activator="{on, attrs}">
-                <v-list-item link :href="item.href">
+            <v-tooltip right>
+              <template v-slot:activator="{on, attrs}">
+                <v-list-item link :href="bottom_items[0].href">
                   <v-list-item-icon>
-                        <v-icon v-bind:color="$route.path==item.href?'#158aaf':''" large v-bind="attrs" v-on="on">{{item.icon}}</v-icon>
+                        <v-icon v-bind:color="$route.path==bottom_items[0].href?'#158aaf':''" large v-bind="attrs" v-on="on">{{bottom_items[0].icon}}</v-icon>
                   </v-list-item-icon>
                 </v-list-item>
               </template>
-              <template v-else-if="isLoggedIn" v-slot:activator="{on, attrs}">
+              <span>{{bottom_items[0].span}}</span>
+            </v-tooltip>
+            <v-tooltip :key="isLoggedIn" right>
+              <template v-if="isLoggedIn" v-slot:activator="{on, attrs}">
                 <v-list-item @click="handleLogout()">
                   <v-list-item-icon>
-                        <v-icon v-bind:color="$route.path==item.href?'#158aaf':''" large v-bind="attrs" v-on="on">{{item.icon}}</v-icon>
+                        <v-icon large v-bind="attrs" v-on="on">{{bottom_items[1].icon}}</v-icon>
                   </v-list-item-icon>
                 </v-list-item>
               </template>
-              <span>{{item.span}}</span>
+              <span>{{bottom_items[1].span}}</span>
             </v-tooltip>
           </v-list>
         </v-layout>
@@ -113,7 +114,7 @@ export default {
     if(theme) {
       theme=="true"?this.$vuetify.theme.dark = true : this.$vuetify.theme.dark = false;
     }
-    this.$store.dispatch('user/searchUserByToken')
+    this.$store.dispatch('user/isLoggedIn')
   },
   computed: {
     ...mapGetters({

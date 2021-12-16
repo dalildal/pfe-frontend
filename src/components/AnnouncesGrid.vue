@@ -55,13 +55,12 @@ export default {
     },
     props: ['search', 'desc', 'campus', 'subcat'],
     mounted () {
-        this.$store.state.announces.then(response=>{this.announces=response.data;})
+        this.$store.state.announces.then(response=>{this.announces=response.data.filter(a=>a.state==='A vendre'||a.state==='A donner')})
         this.$store.state.users.then(response=>this.users=response.data)
     },
     methods: {
         getUserAnnounce(id) {
             let user = this.users.filter(u=>u._id==id)[0]
-            console.log(user.url_profil_pic);
             return {
                 fullname: user.name+" "+user.lastname,
                 pp: user.url_profil_pic

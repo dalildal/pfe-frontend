@@ -19,7 +19,7 @@
                 </v-file-input>
             </v-list-item-avatar>
             <v-list-item-avatar width=75% height=auto v-else>
-                <v-img :src="'https://pfe-vinci-back-dev.herokuapp.com/user/profil-images/'+getProfilPic"></v-img>
+                <v-img :src="displayedImage?displayedImage:'https://pfe-vinci-back-dev.herokuapp.com/user/profil-images/'+getProfilPic"></v-img>
             </v-list-item-avatar>
         </v-list-item>
         <v-list-item>
@@ -48,7 +48,7 @@
         <v-list-item two-line>
             <v-list-item-content>
                 <v-list-item-title>CAMPUS</v-list-item-title>
-                <v-list-item-subtitle v-if="!editMode">{{this.displayedCampus}}</v-list-item-subtitle>
+                <v-list-item-subtitle v-if="!editMode">{{selectedCampus?this.$store.state.campus.filter(c=>c.id==this.selectedCampus)[0].name:this.displayedCampus}}</v-list-item-subtitle>
                 <v-list-item-subtitle v-else>
                     <v-select
                     v-model="selectedCampus"
@@ -73,28 +73,28 @@ export default {
         editMode: false,
         addedImage: null,
         selectedCampus: null,
-        campus: null,
-        displayedImage: null
+        displayedImage: null,
+        campus: null
     }),
     mounted() {
-        this.campus = this.$store.state.campus
-        this.$root.$on('forceRerender', this.forceRerender)
+        this.$store.dispatch('user/searchUserByToken')
     },
     methods: {
         handleClickEdit() {
             if(this.editMode) {
-                try {
-                    const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-                    let fd = new FormData()
-                    fd.append('file',this.addedImage)
-                    fd.append('userId',localStorage.getItem('userId'));
-                    axios.post("https://pfe-vinci-back-dev.herokuapp.com/upload/profil-images/", fd, config)
-                } catch(e) {
-                    console.log(e);
+                if(this.addedImage!=null) {
+                    try {
+                        const config = { headers: { 'Content-Type': 'multipart/form-data' } };
+                        let fd = new FormData()
+                        fd.append('file',this.addedImage)
+                        fd.append('userId',localStorage.getItem('userId'));
+                        axios.post("https://pfe-vinci-back-dev.herokuapp.com/upload/profil-images/", fd, config)
+                    } catch(e) {
+                        console.log(e);
+                    }   
                 }
             }
             this.editMode = !this.editMode
-            this.$forceUpdate()
         },
         editCampus() {
             axios.patch(server.baseURLProd+"user/"+localStorage.getItem("userId"), {campus: this.selectedCampus})
@@ -109,11 +109,12 @@ export default {
         getLastName: 'user/getLastName',
         getCampus: 'user/getCampus',
         getEmail: 'user/getEmail',
-        getProfilPic: 'user/getProfilPic'
+        getProfilPic: 'user/getProfilPic',
+        getUser: 'user/searchUserByToken',
         }),
         displayedCampus() {
             this.$store.dispatch('user/searchUserByToken')
-            return this.campus.filter(c=>c.id==this.getCampus)[0].name
+            return this.$store.state.campus.filter(c=>c.id==this.getCampus)[0].name
         }
     }
 }
