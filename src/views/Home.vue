@@ -158,7 +158,7 @@ export default {
     this.$store.state.users.then(response => (this.users = response.data))
     this.$store.dispatch('user/searchUserByToken')
     this.$store.dispatch('user/isLoggedIn')
-    this.$store.state.myannounces.then(response=>{console.log(response.data);this.myannounces=response.data})
+    this.$store.state.myannounces.then(response=>{this.myannounces=response.data})
   },
   methods: {
     getUserAnnounce(id) {

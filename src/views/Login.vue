@@ -33,6 +33,17 @@
             </v-form>
           </v-col>
         </v-row>
+        <v-alert
+          style="position: absolute; bottom:0"
+          :key="error"
+          :value="error"
+          shaped
+          prominent
+          type="error"
+          transition="scale-transition"
+        >
+          {{error}}
+      </v-alert>
       </v-col>
       <sign-up-canva />
     </v-row>
@@ -55,6 +66,7 @@ export default {
   data() {
     return {
       user: new User("", ""),
+      error: null
     };
   },
 
@@ -63,6 +75,7 @@ export default {
     async handleLogin() {
       await axios
         .post(server.baseURLProd+"user/login", this.user)
+        .catch(e=>{console.log(e);this.error=e})
         .then((response) => {
           if (response.data.access_token) {
             let payload = {
