@@ -157,9 +157,14 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import axios from "axios";
+import Navbar from "../components/Navbar.vue"
 
 export default {
   name: "ProductDetail",
+  components: {
+    Navbar
+  },
+  
   data() {
     return {
       items: [
