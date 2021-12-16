@@ -92,7 +92,7 @@ export default {
         }
     },
     mounted() {
-        this.$store.state.myannounces.then(response=>this.myannounces=response.data)
+        this.$store.state.myannounces.then(response=>{this.myannounces=response.data})
     }
 }
 </script>

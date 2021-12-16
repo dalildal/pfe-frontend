@@ -3,11 +3,11 @@
     <navbar />
     <v-container>
       <v-row>
-        <v-col>
-          <v-card max-width="500">
+        <v-col sm="12" md="6">
+          <v-card>
             <v-carousel>
               <v-carousel-item
-                v-for="picture in pictures"
+                v-for="picture in getListe"
                 :key="picture"
                 :src="
                   'https://pfe-vinci-back-dev.herokuapp.com/products/product-images/' +
@@ -17,8 +17,8 @@
                 transition="fade-transition"
               ></v-carousel-item>
             </v-carousel>
-            <v-row class="py-5">
-              <v-col v-for="picture in pictures" :key="picture">
+            <v-row class="py-5 hidden-sm-and-down">
+              <v-col v-for="picture in getListe" :key="picture">
                 <v-img
                   :src="
                     'https://pfe-vinci-back-dev.herokuapp.com/products/product-images/' +
@@ -32,7 +32,7 @@
             </v-row>
           </v-card>
         </v-col>
-        <v-col>
+        <v-col sm="12" md="6">
           <v-container>
             <v-card
               elevation="0"
@@ -46,24 +46,18 @@
             >
             <v-card class="mb-12" width="100%">
               <v-card-title>Information</v-card-title>
-              <v-card-text
-                >Lorem ipsum dolor sit ameet, consectetur adipiscing elit. Nulla
-                convallis velit ut mauris hendrerit dictum. Cras vitae nibh
-                consectetur, tempus dolor non, porta turpis. Aenean in ligula
-                ultricies, fermentum massa non, cursus est. Nam tincidunt
-                iaculis justo eget tristique. Nulla maximus sagittis interdum.
-                Cras feugiat et nibh malesuada auctor. Maecenas vitae iaculis
-                odio.
+              <v-card-text>
+                {{this.getDescription}}
               </v-card-text>
             </v-card>
             <v-row class="pb-5">
-              <v-col>
-                <v-card width="325">
+              <v-col cols="12">
+                <v-card>
                   <v-card-text>{{ this.currentPlace }}</v-card-text>
                   <gmap-map
                     :center="center"
                     :zoom="12"
-                    style="width: 100%; height: 180px"
+                    style="height: 180px"
                   >
                     <gmap-marker
                       :key="index"
@@ -75,22 +69,22 @@
                 </v-card>
               </v-col>
               <v-col>
-                <v-card height="200" width="100%">
+                <v-card height="200">
                   <v-list>
                     <v-list-item>
                       <v-list-item class="pl-0">{{
-                        userProduct.name
+                        userProduct.name+" "+userProduct.lastname
                       }}</v-list-item>
 
                       <v-list-item-avatar>
                         <v-img
-                          src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                          :src="'https://pfe-vinci-back-dev.herokuapp.com/user/profil-images/'+userProduct.url_profil_pic"
                         ></v-img>
                       </v-list-item-avatar>
                     </v-list-item>
                   </v-list>
-                  <v-card-text class="pb-0"
-                    >Prix: {{ product.price }}
+                  <v-card-text class="pb-0">
+                    Prix: {{ product.price }}€
                   </v-card-text>
                   <v-card-text class="py-0"
                     >Article : {{ product.title }}
@@ -112,33 +106,21 @@
                   v-bind="attrs"
                   v-on="on"
                   width="100%"
-                  style="
-                    background-image: linear-gradient(
-                      to top left,
-                      #0c607a,
-                      #21bfe5
-                    );
-                  "
+                  style="background-image: linear-gradient(to top left, #0c607a, #21bfe5);"
                   >contacter le vendeur</v-btn
                 >
               </template>
               <template v-slot:default="dialog">
                 <v-card>
                   <v-toolbar
-                    style="
-                      background-image: linear-gradient(
-                        to top left,
-                        #0c607a,
-                        #21bfe5
-                      );
-                    "
+                    style="background-image: linear-gradient(to top left, #0c607a, #21bfe5);"
                     dark
                     >Contacte</v-toolbar
                   >
                   <v-card-text>
                     <div class="text-h6 pa-12">
                       Vous pouvez contacter le vendeur par email :
-                      {{ userProduct.email }}
+                      <a :href="'mailto:'+userProduct.email">{{userProduct.email}}</a>
                     </div>
                   </v-card-text>
                   <v-card-actions class="justify-end">
@@ -167,20 +149,6 @@ export default {
   
   data() {
     return {
-      items: [
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
-        },
-      ],
       center: { lat: 45.508, lng: -73.587 },
       markers: [],
       places: [],
@@ -238,6 +206,7 @@ export default {
       getTitle: "product/getTitle",
       getDescription: "product/getDescription",
       getPrice: "product/getPrice",
+      getListe: "product/getListe"
     }),
 
     ...mapState({
