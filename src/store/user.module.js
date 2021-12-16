@@ -11,6 +11,7 @@ export default {
         email: null,
         token: localStorage.getItem('token'),
         is_active: null,
+        is_admin : null,
         url_profil_pic: null,
         userProduct : [],
         users: []
@@ -20,6 +21,7 @@ export default {
         getUsers({commit}) {
             axios.get('http://localhost:3000/user')
             .then(response => {
+                console.log(response.data);
                 commit('SET_USERS', response.data)
             })
             .catch(error => {
@@ -38,6 +40,7 @@ export default {
             { headers: {
                 'Authorization': `Bearer ${this.state.user.token}`
             }})
+            console.log(response.data);
             commit('SET_USER', response.data)
         },
 
@@ -45,7 +48,6 @@ export default {
             axios.get(server.baseURLProd+'user/' + idUserProduct)
             .then(response => {
                 commit('SET_USERPRODUCT', response.data)
-                
             })
             .catch(error => {
                 console.log(error);
@@ -55,8 +57,10 @@ export default {
         updateUser({commit} ,payload) {
             commit('SET_USER',payload)
             console.log(payload)
-            payload.is_active = true
-            axios.put('http://localhost:3000/user/' + payload._id, payload)
+            axios.patch('http://localhost:3000/user/' + payload._id + "/isactive")
+            .then(() => {
+                this.state.users;
+            })
         }
     },
     mutations: {
@@ -75,6 +79,7 @@ export default {
             state.lastname = payload.user.lastname
             state.campus = payload.user.campus
             state.email = payload.user.email
+            state.is_admin = payload.user.is_admin
             state.url_profil_pic = payload.user.url_profil_pic
             
             localStorage.setItem('token', payload.token)
@@ -98,6 +103,7 @@ export default {
             state.campus = user.campus
             state.email = user.email
             state.is_active = user.is_active
+            state.is_admin = user.is_admin
             state.url_profil_pic = user.url_profil_pic
         }
     },
@@ -123,6 +129,9 @@ export default {
         },
         getProfilPic(state) {
             return state.url_profil_pic
+        },
+        isAdmin(state) {
+            return state.is_admin
         }
     }
 

@@ -16,8 +16,9 @@
             </v-list-item>
             <v-tooltip right
               v-for="(item, i) in top_items"
-              :key="i">
-              <template v-slot:activator="{on, attrs}">
+              :key="i"
+              >
+              <template v-slot:activator="{on, attrs}" v-if="i !=2">
                 <v-list-item link :href="item.href">
                   <v-list-item-icon>
                         <v-icon v-bind:color="$route.path==item.href?'#158aaf':''" large v-bind="attrs" v-on="on">{{item.icon}}</v-icon>
@@ -25,6 +26,16 @@
                 </v-list-item>
               </template>
               <span>{{item.span}}</span>
+            </v-tooltip>
+            <v-tooltip :key="isAdmin" right>
+              <template v-if="isAdmin" v-slot:activator="{on, attrs}">
+                <v-list-item link :href="top_items[2].href">
+                  <v-list-item-icon>
+                        <v-icon large v-bind="attrs" v-on="on">{{top_items[2].icon}}</v-icon>
+                  </v-list-item-icon>
+                </v-list-item>
+              </template>
+              <span>{{top_items[2].span}}</span>
             </v-tooltip>
           </v-list>
           <v-list>
@@ -73,12 +84,17 @@ export default {
       {
         href: '/announces',
         icon: 'mdi-widgets-outline',
-        span: 'Annonces'
+        span: 'Annonces',
       },
       {
         href: '/my-announces',
         icon: 'mdi-storefront-outline',
-        span: 'Mes annonces'
+        span: 'Mes annonces',
+      },
+      {
+        href: '/modo',
+        icon: 'mdi-account-tie',
+        span: 'Modération',
       }
     ],
     bottom_items: [
@@ -113,7 +129,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isLoggedIn: 'user/isLoggedIn'
+      isLoggedIn: 'user/isLoggedIn',
+      isAdmin : 'user/isAdmin'
     }),      
   }
 }
