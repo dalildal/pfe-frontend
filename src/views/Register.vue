@@ -67,6 +67,17 @@
                 </v-col>
             </v-row>
         </v-col>
+        <v-alert
+          style="position: absolute; bottom:0"
+          :key="error"
+          :value="error"
+          shaped
+          prominent
+          type="error"
+          transition="scale-transition"
+        >
+            {{error}}
+        </v-alert>
         <sign-up-canva/>
     </v-row>
   </v-card>
@@ -76,7 +87,7 @@
     import SignUpCanva from '../components/SignUpCanva.vue'
     import User from '../models/user.js'
     import axios from 'axios';
-import { server } from '../helper';
+    import { server } from '../helper';
 
     export default {
         name: 'Register',
@@ -96,15 +107,16 @@ import { server } from '../helper';
                 campusrules: [
                     value=>(value>=0&&value<3)||'Champs obligatoire'
                 ],
-                valid: true
+                valid: true,
+                error: null
             }
         },
 
         methods: {
             handleRegister() {
                 axios.post(server.baseURLProd+'user/register',this.user)
-                this.$router.push({path: '/login'})
-
+                .catch(e=>{console.log(e);this.error=e})
+                .then(this.$router.push({path: '/login'}))
             },
 
             changeUser() {

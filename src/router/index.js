@@ -8,6 +8,7 @@ import Announces from '../views/Announces.vue'
 import ProductDetail from '../views/ProductDetail.vue'
 import Modo from '../views/Modo.vue'
 import AddAnnounce from '../views/AddAnnounce.vue'
+import MyAnnounces from '../views/MyAnnounces.vue'
 import Error from '../views/Error.vue'
 
 Vue.use(VueRouter)
@@ -61,6 +62,11 @@ const routes = [
     name: 'AddAnnounce',
     component: AddAnnounce
   },
+  {
+    path:'/my-announces',
+    name:'MyAnnounces',
+    component: MyAnnounces,
+  },
   { 
     path: "*", 
     name: "Error", 
@@ -86,7 +92,8 @@ const PAGE_TITLE = {
   "Add": "VinciMarket | Ajouter une annonce",
   "About": "VinciMarket | À propos de nous`",
   "Error": "VinciMarket | Error",
-  "AddAnnounce": "VinciMarket | Ajouter une annonce"
+  "AddAnnounce": "VinciMarket | Ajouter une annonce",
+  "MyAnnounces": "VinciMarket | Mes annonces"
 }
 
 router.afterEach((toRoute, fromRoute) => {
