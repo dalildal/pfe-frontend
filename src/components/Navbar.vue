@@ -3,12 +3,12 @@
       <v-layout class="mb-5">
         <v-form @submit.prevent="handleSearchSubmit">
         <v-text-field
+          v-bind:id="windowWidth<600?'search':''"
           v-model="search"
           label="Recherche"
-          placeholder="Recherche d'annonce"
+          placeholder="Recherche d'annonce ..."
           outlined
           prepend-inner-icon="mdi-magnify"
-          style="width: 50vw"
         ></v-text-field>
         </v-form>
         <v-spacer />
@@ -30,7 +30,7 @@
           </template>
           <span>Ajouter une annonce</span>
         </v-tooltip>
-        <v-menu offset-y max-height="50vh" style="position: absolute">
+        <v-menu offset-y max-Width="50vh" style="position: absolute">
           <template v-slot:activator="{on, attrs}">
               <v-badge
                 bordered
@@ -116,6 +116,7 @@ export default {
       announces: [],
       notif: null,
       notifications: null,
+      windowWidth: window.innerWidth
     }
   },
   mounted () {
@@ -123,6 +124,9 @@ export default {
     this.isLoggedIn?this.$store.dispatch('user/searchUserByToken'):null
     this.notif = this.notificationsNotRead()
     this.$store.state.notifications.then(response=>this.notifications=response.data.reverse())
+    this.$nextTick(() => {
+        window.addEventListener('resize', this.onResize);
+    })
   },
   methods: {
     notificationRender(notification) {
@@ -150,6 +154,9 @@ export default {
         } })
         this.$parent.$data.search = this.search
         this.$parent.$children[2].$props.search = this.search
+    },
+    onResize() {
+        this.windowWidth = window.innerWidth
     }
   },
   computed: {
@@ -159,6 +166,32 @@ export default {
       getUser: 'user/searchUserByToken',
       getProfilPic: 'user/getProfilPic'
     }),
-  }
+  },
+  watch: {
+    windowWidth(newWidth, oldWidth) {
+        this.txt = `it changed to ${newWidth} from ${oldWidth}`;
+    }
+  },
+  beforeDestroy() { 
+      window.removeEventListener('resize', this.onResize); 
+  },
 }
 </script>
+<style>
+ #search  {
+    width: 2vh;
+}
+
+#search:focus {
+    padding-right:80px;  
+    margin-right:20vh;
+    outline: none;
+}
+
+#search {
+    -webkit-transition: all 0.7s ease 0s;
+    -moz-transition: all 0.7s ease 0s;
+    -o-transition: all 0.7s ease 0s;
+    transition: all 0.7s ease 0s;
+}
+</style>

@@ -1,7 +1,7 @@
 <template>
   <v-card elevation="0">
     <v-row style="height: 100vh">
-      <v-col cols="6">
+      <v-col sm=12 md="6">
         <v-row justify="center">
           <v-col cols="12" sm="10" md="8" lg="6" xl="4">
             <p class="pt-2 font-weight-thin">
@@ -45,7 +45,7 @@
           {{error}}
       </v-alert>
       </v-col>
-      <sign-up-canva />
+      <sign-up-canva class="hidden-sm-and-down" />
     </v-row>
   </v-card>
 </template>

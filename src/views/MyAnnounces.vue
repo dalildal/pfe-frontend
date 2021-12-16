@@ -53,10 +53,10 @@
             </v-expansion-panel-header>
             <v-expansion-panel-content>
                 <v-row>
-                    <v-col cols="3">
-                        <v-img max-height="25vh" :src="'https://pfe-vinci-back-dev.herokuapp.com/products/product-images/'+item.liste[0]" :alt="item.title"></v-img>
+                    <v-col xs=12 sm="3">
+                        <v-img class="rounded-lg" max-height="25vh" :src="'https://pfe-vinci-back-dev.herokuapp.com/products/product-images/'+item.liste[0]" :alt="item.title"></v-img>
                     </v-col>
-                    <v-col cols="6" align-self="center">
+                    <v-col xs=9 sm="6" align-self="center">
                         <i>{{item.description}}</i>
                     </v-col>
                     <v-col cols=3 align-self="center">
